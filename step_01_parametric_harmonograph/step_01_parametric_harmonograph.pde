@@ -25,6 +25,7 @@ void draw(){
       mouseX/100.0, // n2
       mouseY/100.0 // n3
       );
+      System.out.println(mouseX + "and" + mouseY);
       float x = rad * cos(theta) * 50;
       float y = rad * sin(theta) * 50;
       vertex(x,y); 

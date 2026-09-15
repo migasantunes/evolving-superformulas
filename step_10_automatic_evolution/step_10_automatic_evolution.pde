@@ -12,6 +12,10 @@ boolean phenotype_mode = true;
 boolean show_fitness = true;
 
 void settings() {
+  if (displayWidth <= 0 || displayHeight <= 0){
+     displayWidth = 1024;   
+     displayHeight = 768;
+  }
   size(int(displayWidth * 0.9), int(displayHeight * 0.8), P2D);
   smooth(8);
 }
