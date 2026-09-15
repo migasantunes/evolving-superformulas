@@ -1,16 +1,18 @@
 void setup() {
 size(500,500);
 noFill();
-stroke(255);
-strokeWeight(2);
+stroke(0);
+strokeWeight(1);
 }
 
 void draw(){
-  //background(0);
+  background(255);
  
   translate(width/2, height/2);
-  
-  for (int i = 1; i < 5; i++){
+  noFill();
+  stroke(0);
+
+  for (int i = 1; i < 10; i++){
   
     beginShape();
       
