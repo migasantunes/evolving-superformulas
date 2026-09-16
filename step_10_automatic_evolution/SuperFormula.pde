@@ -4,7 +4,7 @@ import processing.pdf.*; // Needed to export PDFs
 // This class represents and encodes a superformula.
 class SuperFormula {
   
-  float[] genes = new float[12]; // Genes 0-5 are the base a, b, m, n1, n2, n3; genes 6-11 are how much each one changes per layer
+  float[] genes = new float[14]; // Genes 0-6 are the base a, b, m, n1, n2, n3, size; genes 7-13 are how much each one changes per layer
   float fitness = 0; // Fitness value
   int num_layers = 5;
   float theta_step = 0.01;
@@ -126,21 +126,32 @@ class SuperFormula {
 
   // Calculate the points of every layer of this superformula
   void calculatePoints(float w, float h) {
-    // Evolved shapes vary wildly in size, so first find the biggest radius, then scale the figure so it fits the canvas
-    double max_rad = 0;
+    double max_rad;
+    double scale;
+    layers.clear();
+
     for (int i = 0; i < num_layers; i++) {
-      float[] p = getLayerParams(i);
+      // Get a, b, m, n1, n2, n3, size of a given layer: each is base + layer * step, kept within [min, max]
+      // with the step being: step = (gene - 0.5) * 2 * (max - min) / (num_layers - 1)
+      float a  = constrain(0.1 + genes[0] * 4.9  + i * (genes[7]  - 0.5) * 2 * 4.9  / (num_layers - 1), 0.1, 5);
+      float b  = constrain(0.1 + genes[1] * 4.9  + i * (genes[8]  - 0.5) * 2 * 4.9  / (num_layers - 1), 0.1, 5);
+      float m  = constrain(round(1 + genes[2] * 20 + i * (genes[9] - 0.5) * 2 * 20 / (num_layers - 1)), 1, 21);
+      float n1 = constrain(0.1 + genes[3] * 19.9 + i * (genes[10]  - 0.5) * 2 * 19.9 / (num_layers - 1), 0.1, 20);
+      float n2 = constrain(0.1 + genes[4] * 19.9 + i * (genes[11] - 0.5) * 2 * 19.9 / (num_layers - 1), 0.1, 20);
+      float n3 = constrain(0.1 + genes[5] * 19.9 + i * (genes[12] - 0.5) * 2 * 19.9 / (num_layers - 1), 0.1, 20);
+      float size = constrain(0.15 + genes[6] * 2.85 + i * (genes[13] - 0.5) * 2 * 2.85 / (num_layers - 1), 0.15, 3);
+
+      float[] p = {a, b, m, n1, n2, n3, size};
+
       float theta_max = (p[2] % 2 == 0) ? TWO_PI : 2 * TWO_PI; // Odd m only closes after two turns
+
+      max_rad = 0;
       for (float theta = 0; theta < theta_max; theta += theta_step) {
         max_rad = Math.max(max_rad, r(theta, p));
       }
-    }
-    double scale = min(w, h) / 2 / max_rad;
+      
+      scale = p[6] * min(w, h) / 2 / max_rad;
 
-    layers.clear();
-    for (int i = 0; i < num_layers; i++) {
-      float[] p = getLayerParams(i);
-      float theta_max = (p[2] % 2 == 0) ? TWO_PI : 2 * TWO_PI;
       ArrayList<PVector> points = new ArrayList<PVector>();
       for (float theta = 0; theta < theta_max; theta += theta_step) {
         float rad = (float) (r(theta, p) * scale);
@@ -150,23 +161,12 @@ class SuperFormula {
     }
   }
 
-  // Get a, b, m, n1, n2, n3 of a given layer: each is base + layer * step, kept within [min, max]
-  // with the step being: step = (gene - 0.5) * 2 * (max - min) / (num_layers - 1)
-  float[] getLayerParams(int layer) {
-    float a  = constrain(0.1 + genes[0] * 4.9  + layer * (genes[6]  - 0.5) * 2 * 4.9  / (num_layers - 1), 0.1, 5);
-    float b  = constrain(0.1 + genes[1] * 4.9  + layer * (genes[7]  - 0.5) * 2 * 4.9  / (num_layers - 1), 0.1, 5);
-    float m  = constrain(round(1 + genes[2] * 20 + layer * (genes[8] - 0.5) * 2 * 20 / (num_layers - 1)), 1, 21);
-    float n1 = constrain(0.1 + genes[3] * 19.9 + layer * (genes[9]  - 0.5) * 2 * 19.9 / (num_layers - 1), 0.1, 20);
-    float n2 = constrain(0.1 + genes[4] * 19.9 + layer * (genes[10] - 0.5) * 2 * 19.9 / (num_layers - 1), 0.1, 20);
-    float n3 = constrain(0.1 + genes[5] * 19.9 + layer * (genes[11] - 0.5) * 2 * 19.9 / (num_layers - 1), 0.1, 20);
-    return new float[] {a, b, m, n1, n2, n3};
-  }
 
   // Superformula radius at a given angle (in double, float has chance of overflowing)
+  // Using Math.pow()/Math.abs()/Math.max() instead of Processing's pow()/abs()/max() because the it rejects doubles and I need to use them for the ranges of the params
   double r(float theta, float[] p) {
     double a = p[0], b = p[1], m = p[2], n1 = p[3], n2 = p[4], n3 = p[5];
-    return Math.pow(Math.pow(Math.abs(Math.cos(m * theta / 4) / a), n2) +
-                    Math.pow(Math.abs(Math.sin(m * theta / 4) / b), n3), -1 / n1);
+    return Math.pow(Math.pow(Math.abs(Math.cos(m * theta / 4) / a), n2) + Math.pow(Math.abs(Math.sin(m * theta / 4) / b), n3), -1 / n1);
   }
   
   // Export image (png), vector (pdf) and genes (txt) of this SuperFormula
