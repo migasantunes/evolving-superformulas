@@ -4,7 +4,7 @@
 
 ### Starting point
 - Understood the project requirements and objectives.
-- Set up the development environment for Processing but to use VSCode as a code editor, viewer and version control.
+- Set up the development environment for Processing but I am using VSCode as a code editor, viewer and version control.
 
 ### Learning the project structure and implementing the Superformula in step 1
 - Changed the project struture from harmonographs to superformulas on step 1
@@ -34,6 +34,16 @@
 - Each layer's values are clamped to the valid ranges, so a negative step can't push a parameter out of its range in the outer layers
 - Normalised all layers together with a single scale, otherwise each layer would fill the canvas and the nesting would disappear
 - points became a list of point lists, and render() draws each layer as its own shape
+
+## Day 2
+
+### Realising the shape could only ever touch the canvas edge
+- Noticed that normalising every genome to fill the canvas meant the population could never contain a shape sitting small with margins, or one that overflows and gets cropped at the edges, even though the target image likely has margins that no edge-touching shape could match
+- Added a size gene (gene 12) so how big the shape is relative to the canvas is evolvable instead of fixed, changing scale from size * min(w,h) / 2 / max_rad, with size mapped from the gene to roughly 0.15x-2x the canvas
+
+### Finding that a shared scale between layers hides most of them
+- Realised that normalising all 5 layers with one shared scale means each layer's size relative to the others comes only from its raw radius, and those raw radii can differ by many orders of magnitude between layers
+- Decided each layer needs its own size, using the same base + step pattern as the other parameters (a 7th value per layer, genes 7 & 13), and normalising each layer separately instead of all together;
 
 ## Notes
 - Ranges, layer count and step sizes still need tuning
