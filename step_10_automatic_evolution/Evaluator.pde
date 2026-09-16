@@ -1,4 +1,4 @@
-// This class enables the evaluation of individuals (harmonographs).
+// This class enables the evaluation of individuals (SuperFormulas).
 class Evaluator {
   
   PImage target_image; // Image of the target image
@@ -11,7 +11,7 @@ class Evaluator {
   }
   
   // Calculate the fitness of a given individual (this is the fitness function)
-  float calculateFitness(Harmonograph indiv) {
+  float calculateFitness(SuperFormula indiv) {
     PImage phenotype = indiv.getPhenotype(target_image.height);
     int[] phenotype_pixels_brightness = getPixelsBrightness(phenotype);
     float similarity = getSimilarityRMSE(target_pixels_brightness, phenotype_pixels_brightness, 255);

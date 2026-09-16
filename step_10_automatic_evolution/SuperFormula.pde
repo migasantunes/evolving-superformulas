@@ -4,11 +4,11 @@ import processing.pdf.*; // Needed to export PDFs
 // This class represents and encodes a superformula.
 class SuperFormula {
   
-  float[] genes = new float[6]; // Array of genes that store the values of the SuperFormula parameters, in this case a, b, m, n1, n2, n3
+  float[] genes = new float[12]; // Genes 0-5 are the base a, b, m, n1, n2, n3; genes 6-11 are how much each one changes per layer
   float fitness = 0; // Fitness value
-  float time_max = 150;
-  float time_step = 0.05;
-  ArrayList<PVector> points = new ArrayList<PVector>();
+  int num_layers = 5;
+  float theta_step = 0.01;
+  ArrayList<ArrayList<PVector>> layers = new ArrayList<ArrayList<PVector>>();
   
   // Create a random SuperFormula
   SuperFormula() {
@@ -25,7 +25,7 @@ class SuperFormula {
   // Set all genes to random values 
   void randomize() {
     for (int i = 0; i < genes.length; i++) {
-      genes[i] = random(0.1, 10);
+      genes[i] = random(0, 1);
     }
   }
   
@@ -60,7 +60,7 @@ class SuperFormula {
   void mutate() {
     for (int i = 0; i < genes.length; i++) {
       if (random(1) <= mutation_rate) {
-        genes[i] = random(0.1, 10); // Replace gene with a random one
+        genes[i] = random(1); // Replace gene with a random one
         //genes[i] = constrain(genes[i] + random(-0.2, 0.2), 0, 1); // Adjust the value of the gene
       }
     }
@@ -96,67 +96,84 @@ class SuperFormula {
     return canvas;
   }
   
-  // Draw the harmonograph line on a given canvas, at a given position and with a given size
+  // Draw the superformula layers on a given canvas, at a given position and with a given size
   void render(PGraphics canvas, float x, float y, float w, float h) {
     calculatePoints(w, h);
     canvas.pushMatrix();
     canvas.translate(x, y);
-    canvas.beginShape();
-    for (int i = 0; i < points.size(); i++) {
-      canvas.vertex(points.get(i).x, points.get(i).y);
+    for (ArrayList<PVector> points : layers) {
+      canvas.beginShape();
+      for (PVector point : points) {
+        canvas.vertex(point.x, point.y);
+      }
+      canvas.endShape(CLOSE);
     }
-    canvas.endShape();
     canvas.popMatrix();
   }
-  
-  // Draw the harmonograph points on a given canvas, at a given position and with a given size
+
+  // Draw the superformula points on a given canvas, at a given position and with a given size
   void renderPoints(PGraphics canvas, float x, float y, float w, float h) {
     calculatePoints(w, h);
     canvas.pushMatrix();
     canvas.translate(x, y);
-    for (int i = 0; i < points.size(); i++) {
-      canvas.point(points.get(i).x, points.get(i).y);
+    for (ArrayList<PVector> points : layers) {
+      for (PVector point : points) {
+        canvas.point(point.x, point.y);
+      }
     }
     canvas.popMatrix();
   }
-  
-  // Calculate the points of this harmonograph
+
+  // Calculate the points of every layer of this superformula
   void calculatePoints(float w, float h) {
-    float a1 = w * (0.15 + 0.1 * genes[0]);
-    float a2 = w * (0.15 + 0.1 * genes[1]);
-    float a3 = h * (0.15 + 0.1 * genes[2]);
-    float a4 = h * (0.15 + 0.1 * genes[3]);
-    float v1 = -0.02 + 0.04 * genes[4];
-    float v2 = -0.02 + 0.04 * genes[5];
-    float v3 = -0.02 + 0.04 * genes[6];
-    float v4 = -0.02 + 0.04 * genes[7];
-    float f1 = v1 + 1 + int(5 * genes[8]);
-    float f2 = v2 + 1 + int(5 * genes[9]);
-    float f3 = v3 + 1 + int(5 * genes[10]);
-    float f4 = v4 + 1 + int(5 * genes[11]);
-    float p1 = TWO_PI * genes[12];
-    float p2 = TWO_PI * genes[13];
-    float p3 = TWO_PI * genes[14];
-    float p4 = TWO_PI * genes[15];
-    float d1 = 0.01 * genes[16];
-    float d2 = 0.01 * genes[17];
-    float d3 = 0.01 * genes[18];
-    float d4 = 0.01 * genes[19];
-    points.clear();
-    for (float t = 0; t < time_max; t += time_step) {
-      float point_x = a1 * sin(t * f1 + p1) * exp(-d1 * t) + a2 * sin(t * f2 + p2) * exp(-d2 * t);
-      float point_y = a3 * sin(t * f3 + p3) * exp(-d3 * t) + a4 * sin(t * f4 + p4) * exp(-d4 * t);
-      PVector point = new PVector(point_x, point_y);
-      points.add(point);
+    // Evolved shapes vary wildly in size, so first find the biggest radius, then scale the figure so it fits the canvas
+    double max_rad = 0;
+    for (int i = 0; i < num_layers; i++) {
+      float[] p = getLayerParams(i);
+      float theta_max = (p[2] % 2 == 0) ? TWO_PI : 2 * TWO_PI; // Odd m only closes after two turns
+      for (float theta = 0; theta < theta_max; theta += theta_step) {
+        max_rad = Math.max(max_rad, r(theta, p));
+      }
+    }
+    double scale = min(w, h) / 2 / max_rad;
+
+    layers.clear();
+    for (int i = 0; i < num_layers; i++) {
+      float[] p = getLayerParams(i);
+      float theta_max = (p[2] % 2 == 0) ? TWO_PI : 2 * TWO_PI;
+      ArrayList<PVector> points = new ArrayList<PVector>();
+      for (float theta = 0; theta < theta_max; theta += theta_step) {
+        float rad = (float) (r(theta, p) * scale);
+        points.add(new PVector(rad * cos(theta), rad * sin(theta)));
+      }
+      layers.add(points);
     }
   }
+
+  // Get a, b, m, n1, n2, n3 of a given layer: each is base + layer * step, kept within [min, max]
+  // with the step being: step = (gene - 0.5) * 2 * (max - min) / (num_layers - 1)
+  float[] getLayerParams(int layer) {
+    float a  = constrain(0.1 + genes[0] * 4.9  + layer * (genes[6]  - 0.5) * 2 * 4.9  / (num_layers - 1), 0.1, 5);
+    float b  = constrain(0.1 + genes[1] * 4.9  + layer * (genes[7]  - 0.5) * 2 * 4.9  / (num_layers - 1), 0.1, 5);
+    float m  = constrain(round(1 + genes[2] * 20 + layer * (genes[8] - 0.5) * 2 * 20 / (num_layers - 1)), 1, 21);
+    float n1 = constrain(0.1 + genes[3] * 19.9 + layer * (genes[9]  - 0.5) * 2 * 19.9 / (num_layers - 1), 0.1, 20);
+    float n2 = constrain(0.1 + genes[4] * 19.9 + layer * (genes[10] - 0.5) * 2 * 19.9 / (num_layers - 1), 0.1, 20);
+    float n3 = constrain(0.1 + genes[5] * 19.9 + layer * (genes[11] - 0.5) * 2 * 19.9 / (num_layers - 1), 0.1, 20);
+    return new float[] {a, b, m, n1, n2, n3};
+  }
+
+  // Superformula radius at a given angle (in double, float has chance of overflowing)
+  double r(float theta, float[] p) {
+    double a = p[0], b = p[1], m = p[2], n1 = p[3], n2 = p[4], n3 = p[5];
+    return Math.pow(Math.pow(Math.abs(Math.cos(m * theta / 4) / a), n2) +
+                    Math.pow(Math.abs(Math.sin(m * theta / 4) / b), n3), -1 / n1);
+  }
   
-  // Export image (png), vector (pdf) and genes (txt) of this harmonograph
+  // Export image (png), vector (pdf) and genes (txt) of this SuperFormula
   void export() {
-    String output_filename = year() + "-" + nf(month(), 2) + "-" + nf(day(), 2) + "-" +
-                             nf(hour(), 2) + "-" + nf(minute(), 2) + "-" + nf(second(), 2);
+    String output_filename = year() + "-" + nf(month(), 2) + "-" + nf(day(), 2) + "-" + nf(hour(), 2) + "-" + nf(minute(), 2) + "-" + nf(second(), 2);
     String output_path = sketchPath("outputs/" + output_filename);
-    println("Exporting harmonograph to: " + output_path);
+    println("Exporting SuperFormula to: " + output_path);
     
     getPhenotype(2000).save(output_path + ".png");
     

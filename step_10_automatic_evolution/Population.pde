@@ -1,14 +1,14 @@
 import java.util.*; // Needed to sort arrays
 
-// This class stores and manages a population of individuals (harmonographs).
+// This class stores and manages a population of individuals (SuperFormulas).
 class Population {
   
-  Harmonograph[] individuals; // Array to store the individuals in the population
+  SuperFormula[] individuals; // Array to store the individuals in the population
   Evaluator evaluator; // Object to calculate fitness of individuals
   int generations; // Integer to keep count of how many generations have been created
   
   Population() {
-    individuals = new Harmonograph[population_size];
+    individuals = new SuperFormula[population_size];
     evaluator = new Evaluator(loadImage(path_target_image), resolution);
     initialize();
   }
@@ -17,7 +17,7 @@ class Population {
   void initialize() {
     // Fill population with random individuals
     for (int i = 0; i < individuals.length; i++) {
-      individuals[i] = new Harmonograph();
+      individuals[i] = new SuperFormula();
     }
     
     // Evaluate individuals
@@ -36,7 +36,7 @@ class Population {
   // Create the next generation
   void evolve() {
     // Create a new array to store the individuals that will be in the next generation
-    Harmonograph[] new_generation = new Harmonograph[individuals.length];
+    SuperFormula[] new_generation = new SuperFormula[individuals.length];
     
     // Copy the elite to the next generation (we assume that the individuals are already sorted by fitness)
     for (int i = 0; i < elite_size; i++) {
@@ -46,10 +46,10 @@ class Population {
     // Create (breed) new individuals with crossover
     for (int i = elite_size; i < new_generation.length; i++) {
       if (random(1) <= crossover_rate) {
-        Harmonograph parent1 = tournamentSelection();
-        Harmonograph parent2 = tournamentSelection();
-        //Harmonograph child = parent1.onePointCrossover(parent2);
-        Harmonograph child = parent1.uniformCrossover(parent2);
+        SuperFormula parent1 = tournamentSelection();
+        SuperFormula parent2 = tournamentSelection();
+        //SuperFormula child = parent1.onePointCrossover(parent2);
+        SuperFormula child = parent1.uniformCrossover(parent2);
         new_generation[i] = child;
       } else {
         new_generation[i] = tournamentSelection().getCopy();
@@ -80,15 +80,15 @@ class Population {
   }
   
   // Select one individual using a tournament selection 
-  Harmonograph tournamentSelection() {
+  SuperFormula tournamentSelection() {
     // Select a random set of individuals from the population
-    Harmonograph[] tournament = new Harmonograph[tournament_size];
+    SuperFormula[] tournament = new SuperFormula[tournament_size];
     for (int i = 0; i < tournament.length; i++) {
       int random_index = int(random(0, individuals.length));
       tournament[i] = individuals[random_index];
     }
     // Get the fittest individual from the selected individuals
-    Harmonograph fittest = tournament[0];
+    SuperFormula fittest = tournament[0];
     for (int i = 1; i < tournament.length; i++) {
       if (tournament[i].getFitness() > fittest.getFitness()) {
         fittest = tournament[i];
@@ -99,15 +99,15 @@ class Population {
   
   // Sort individuals in the population by fitness in descending order (fittest first)
   void sortIndividualsByFitness() {
-    Arrays.sort(individuals, new Comparator<Harmonograph>() {
-      public int compare(Harmonograph indiv1, Harmonograph indiv2) {
+    Arrays.sort(individuals, new Comparator<SuperFormula>() {
+      public int compare(SuperFormula indiv1, SuperFormula indiv2) {
         return Float.compare(indiv2.getFitness(), indiv1.getFitness());
       }
     });
   }
   
   // Get an individual from the popultioon located at the given index
-  Harmonograph getIndiv(int index) {
+  SuperFormula getIndiv(int index) {
     return individuals[index];
   }
   
