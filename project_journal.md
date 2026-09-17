@@ -45,6 +45,28 @@
 - Realised that normalising all 5 layers with one shared scale means each layer's size relative to the others comes only from its raw radius, and those raw radii can differ by many orders of magnitude between layers
 - Decided each layer needs its own size, using the same base + step pattern as the other parameters (a 7th value per layer, genes 7 & 13), and normalising each layer separately instead of all together;
 
+### Tuning ranges, layer count and step sizes
+- Swept a/b max and n1/n2/n3 max: left them at 5 and 20 
+- Swept size min/max: left at 0.1-2, which gives a good range of small and large shapes after this, becomes less important
+- Settled on 6 layers: more gives better results in testing, but it gets too slow past that
+
+### Fixing the sub-pixel fitness stroke
+- canvas.strokeWeight(canvas.height * 0.002) makes sub-pixel strokes at low resolutions, which causes bad fitness readings, instead, I capped it at max(1, canvas.height * 0.002) so it never goes below 1px, which is the minimum for a solid black stroke
+
+### Fixing a NaN bug with a single layer
+- num_layers = 1 always gave a blank canvas because of division by zero in the step term (i / (num_layers - 1))
+- Fixed by flooring the denominator at 1 (layer_denom = max(num_layers - 1, 1));
+
+### Understanding the "double lines" per layer
+- Noticed the rendered shape had exactly 2x as many visible lines as layers (12 for 6 layers, 14 for 7), which traced back to the odd-m quirk from Day 1: odd m needs two full turns to close, and during each turn the radius is different at the same angle, so it looks like two overlapping loops per layer even though it's coded as a single closed shape
+- Confirmed it isn't a bug by running with the strokeWeight set to 10px where m came out even for every layer, which correctly gave exactly num_layers lines
+- Suspected the GA was converging on odd m quickly because it's a genuine fitness advantage rather than a shortcut in the encoding/fitness function
+- Decided not to restrict m to even values: that would remove every odd-fold-symmetric shape
+
+### Brainstormed making step_scale evolvable
+- Considered adding a step_scale gene so each individual could set its own ceiling on how much its layers diverge from each other, on top of the per-parameter step genes that already exist, similar to self-adaptive step sizes in evolution strategies
+- Decided against it for now: it would need its own range tuned, which is the same problem just solved for the other genes, and there's no evidence yet that one fixed step ceiling is limiting the population; parked as a future task, to revisit only if evidence shows a fixed ceiling is a bottleneck
+
 ## Notes
-- Ranges, layer count and step sizes still need tuning
 - everything about the drawing style needs implementing as a gene (stroke weight, stroke color, fill color, etc.) as prof said
+- step_scale could be made evolvable later, if a fixed value turns out to limit the population
