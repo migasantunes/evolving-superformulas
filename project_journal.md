@@ -47,3 +47,4 @@
 
 ## Notes
 - Ranges, layer count and step sizes still need tuning
+- everything about the drawing style needs implementing as a gene (stroke weight, stroke color, fill color, etc.) as prof said

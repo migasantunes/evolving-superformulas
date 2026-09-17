@@ -6,8 +6,8 @@ class SuperFormula {
   
   float[] genes = new float[14]; // Genes 0-6 are the base a, b, m, n1, n2, n3, size; genes 7-13 are how much each one changes per layer
   float fitness = 0; // Fitness value
-  int num_layers = 5;
-  float theta_step = 0.01;
+  int num_layers = 6; // Even if 6 is slower it gets more results then lower values, more than that it becomes too slow
+  float theta_step = 0.005; // before it was 0.01, after tuning it is 0.005, no runtime loss
   ArrayList<ArrayList<PVector>> layers = new ArrayList<ArrayList<PVector>>();
   
   // Create a random SuperFormula
@@ -90,7 +90,7 @@ class SuperFormula {
     canvas.background(255);
     canvas.noFill();
     canvas.stroke(0);
-    canvas.strokeWeight(canvas.height * 0.002);
+    canvas.strokeWeight(max(1, canvas.height * 0.002)); // floor of 1 pixel so the stroke doesn't go sub-pixel at low resolutions
     render(canvas, canvas.width / 2, canvas.height / 2, canvas.width, canvas.height);
     canvas.endDraw();
     return canvas;
@@ -130,16 +130,18 @@ class SuperFormula {
     double scale;
     layers.clear();
 
+    float layer_denom = max(num_layers - 1, 1); // when num_layers == 1; this goes to a division by 0, to avoid it I flored it to 1
+
     for (int i = 0; i < num_layers; i++) {
       // Get a, b, m, n1, n2, n3, size of a given layer: each is base + layer * step, kept within [min, max]
-      // with the step being: step = (gene - 0.5) * 2 * (max - min) / (num_layers - 1)
-      float a  = constrain(0.1 + genes[0] * 4.9  + i * (genes[7]  - 0.5) * 2 * 4.9  / (num_layers - 1), 0.1, 5);
-      float b  = constrain(0.1 + genes[1] * 4.9  + i * (genes[8]  - 0.5) * 2 * 4.9  / (num_layers - 1), 0.1, 5);
-      float m  = constrain(round(1 + genes[2] * 20 + i * (genes[9] - 0.5) * 2 * 20 / (num_layers - 1)), 1, 21);
-      float n1 = constrain(0.1 + genes[3] * 19.9 + i * (genes[10]  - 0.5) * 2 * 19.9 / (num_layers - 1), 0.1, 20);
-      float n2 = constrain(0.1 + genes[4] * 19.9 + i * (genes[11] - 0.5) * 2 * 19.9 / (num_layers - 1), 0.1, 20);
-      float n3 = constrain(0.1 + genes[5] * 19.9 + i * (genes[12] - 0.5) * 2 * 19.9 / (num_layers - 1), 0.1, 20);
-      float size = constrain(0.15 + genes[6] * 2.85 + i * (genes[13] - 0.5) * 2 * 2.85 / (num_layers - 1), 0.15, 3);
+      // with the step being: step = (gene - 0.5) * 2 * (max - min) / layer_denom
+      float a  = constrain(0.1 + genes[0] * 4.9  + i * (genes[7]  - 0.5) * 2 * 4.9  / layer_denom, 0.1, 5);
+      float b  = constrain(0.1 + genes[1] * 4.9  + i * (genes[8]  - 0.5) * 2 * 4.9  / layer_denom, 0.1, 5);
+      float m  = constrain(round(1 + genes[2] * 20 + i * (genes[9] - 0.5) * 2 * 20 / layer_denom), 1, 21);
+      float n1 = constrain(0.1 + genes[3] * 19.9 + i * (genes[10]  - 0.5) * 2 * 19.9 / layer_denom, 0.1, 20);
+      float n2 = constrain(0.1 + genes[4] * 19.9 + i * (genes[11] - 0.5) * 2 * 19.9 / layer_denom, 0.1, 20);
+      float n3 = constrain(0.1 + genes[5] * 19.9 + i * (genes[12] - 0.5) * 2 * 19.9 / layer_denom, 0.1, 20);
+      float size = constrain(0.1 + genes[6] * 1.9 + i * (genes[13] - 0.5) * 2 * 1.9 / layer_denom, 0.1, 2);
 
       float[] p = {a, b, m, n1, n2, n3, size};
 

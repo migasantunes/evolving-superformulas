@@ -12,7 +12,8 @@ void draw(){
   noFill();
   stroke(0);
 
-  for (int i = 1; i < 10; i++){
+  int i = 1;
+  //for (i = 1; i < 10; i++){
   
     beginShape();
       
@@ -20,19 +21,18 @@ void draw(){
       float rad = r(theta,
       2*i, // a play around with these parameters to create interesting shapes.
       2*i, // b
-      6*i, // m
+      3*i, // m
       1*i, // n1
       mouseX/100.0, // n2
       mouseY/100.0 // n3
       );
-      System.out.println(mouseX + "and" + mouseY);
       float x = rad * cos(theta) * 50;
       float y = rad * sin(theta) * 50;
       vertex(x,y); 
     }
     
     endShape();
-  }
+  //}
   
   //Creating a rectangle that creates a motion blur effect on the shapes
   fill (0,40);
