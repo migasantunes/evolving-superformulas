@@ -67,6 +67,29 @@
 - Considered adding a step_scale gene so each individual could set its own ceiling on how much its layers diverge from each other, on top of the per-parameter step genes that already exist, similar to self-adaptive step sizes in evolution strategies
 - Decided against it for now: it would need its own range tuned, which is the same problem just solved for the other genes, and there's no evidence yet that one fixed step ceiling is limiting the population; parked as a future task, to revisit only if evidence shows a fixed ceiling is a bottleneck
 
+## Day 3
+
+### Adapting the interactive evolution (step 11) to the SuperFormula
+- Took SuperFormula from step 10, but kept step 11's Population and main code, but adapted each to work with SuperFormula
+- Added phenotype caching (PImage cleared in randomize() and mutate()), took Harmonograph as an example.
+- Changed uniformCrossover to return two children
+- Switched mutation from replacing a gene to nudging it by +/-0.1
+- Restored the max(1, canvas.height * 0.002) stroke floor from Day 2, lost while copying the class over
+
+### Changing the fitness from 0/1 to 1-10
+- Kept 0 as "unrated" so the existing fitness > 0 checks keep working
+- Controls: keys 1-9 set the rating, UP/DOWN +/-1, RIGHT sets 10, LEFT clears, left click +1, right click -1
+- Displayed the rating as an integer
+
+### Replacing tournament with roulette selection
+- Created the rouletteSelection() method, and replaced tournamentSelectionV2() with it in the crossover branch, and tournamentSelection() with it in the non-crossover branch
+
+### Writing the roulette selection
+- First attempt gave each individual its own coin flip of fitness / total while walking the array, which isn't proportional (10 vs 4 came out ~90%/10%) because whoever passes its flip first is taken, and evolve() sorts the population so the best was always first
+- Shuffling before walking still isn't proportional, so I dropped the coin-flip approach
+- Used the standard wheel: one random number between 0 and totalFitness, accumulate fitness, return the first individual where hit < addedFit
+- Guarded total == 0 (evolving without rating anything) with a random individual
+
 ## Notes
 - everything about the drawing style needs implementing as a gene (stroke weight, stroke color, fill color, etc.) as prof said
 - step_scale could be made evolvable later, if a fixed value turns out to limit the population

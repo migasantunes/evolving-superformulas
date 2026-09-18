@@ -7,9 +7,13 @@ int resolution = 256;
 
 Population pop;
 PVector[][] cells;
-Harmonograph hovered_indiv = null;
+SuperFormula hovered_indiv = null;
 
 void settings() {
+  if (displayWidth <= 0 || displayHeight <= 0){
+     displayWidth = 1024;   
+     displayHeight = 768;
+  }
   size(int(displayWidth * 0.9), int(displayHeight * 0.8), P2D);
   smooth(8);
 }
@@ -43,7 +47,7 @@ void draw() {
     // Draw fitness of current individual
     fill(0);
     textAlign(CENTER, TOP);
-    text(nf(pop.getIndiv(i).getFitness(), 0, 2), x + d / 2, y + d + 5);
+    text(int(pop.getIndiv(i).getFitness()), x + d / 2, y + d + 5);
     // Go to next grid cell
     col += 1;
     if (col >= cells[row].length) {
@@ -56,7 +60,8 @@ void draw() {
   fill(128);
   textSize(14);
   textAlign(LEFT, BOTTOM);
-  text("Controls:     [click over indiv] set as preferred     [enter] evolve     [r] reset     [e] export individ hovered by the cursor", 30, height - 30);
+    text("Controls:     [1-9] set Fitness     [left-click/UP] Fitness +1     [right-click/DOWN] Fitness -1     [RIGHT] Fitness = 10     [LEFT] Fitness = 0\n" +
+      "                       [enter] evolve     [r] reset     [e] export individ hovered by the cursor", 30, height - 30);
 }
 
 void keyReleased() {
@@ -79,13 +84,32 @@ void keyReleased() {
       // Change fitness of the selected (hovered) individual
       float fit = hovered_indiv.getFitness();
       if (keyCode == UP) {
-        fit = min(fit + 0.1, 1);
+        fit = min(fit + 1, 10);
       } else if (keyCode == DOWN) {
-        fit = max(fit - 0.1, 0);
+        fit = max(fit - 1, 0);
       } else if (keyCode == RIGHT) {
-        fit = 1;
+        fit = 10;
       } else if (keyCode == LEFT) {
         fit = 0;
+      // added number keys to set fitness directly it's easier for testing
+      } else if (key == '1') {
+        fit = 1;
+      } else if (key == '2') {
+        fit = 2;
+      } else if (key == '3') {
+        fit = 3;
+      } else if (key == '4') {
+        fit = 4;
+      } else if (key == '5') {
+        fit = 5;
+      } else if (key == '6') {
+        fit = 6;
+      } else if (key == '7') {
+        fit = 7;
+      } else if (key == '8') {
+        fit = 8;
+      } else if (key == '9') {
+        fit = 9;
       }
       hovered_indiv.setFitness(fit);
     }
@@ -93,12 +117,13 @@ void keyReleased() {
 }
 
 void mouseReleased() {
-  // Set fitness of clicked individual to 1
+  // Set fitness of clicked individual to +1 
   if (hovered_indiv != null) {
-    if (hovered_indiv.getFitness() < 1) {
-      hovered_indiv.setFitness(1);
-    } else {
-      hovered_indiv.setFitness(0);
+    float fit = hovered_indiv.getFitness();
+    if (mouseButton == LEFT) {
+      hovered_indiv.setFitness(min(fit + 1, 10));
+    } else if (mouseButton == RIGHT) {
+      hovered_indiv.setFitness(max(fit - 1, 0));
     }
   }
 }
