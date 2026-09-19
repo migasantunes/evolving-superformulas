@@ -39,19 +39,16 @@ class Population {
     }
     
     // Create (breed) new individuals with crossover
-    for (int i = eliteSizeAdjusted; i < population_size; i += 2) {
-      SuperFormula[] newIndivs;
+    for (int i = eliteSizeAdjusted; i < population_size; i++) {
+      SuperFormula newIndiv;
       if (random(1) < crossover_rate) {
         SuperFormula parent1 = rouletteSelection();
         SuperFormula parent2 = rouletteSelection();
-        newIndivs = parent1.uniformCrossover(parent2);
+        newIndiv = parent1.blxAlphaCrossover(parent2);
       } else {
-        newIndivs = new SuperFormula[]{rouletteSelection().getCopy(), rouletteSelection().getCopy()};
+        newIndiv = rouletteSelection().getCopy();
       }
-      new_generation[i] = newIndivs[0];
-      if (i + 1 < population_size) {
-        new_generation[i + 1] = newIndivs[1];
-      }
+      new_generation[i] = newIndiv;
     }
     
     // Mutate new individuals

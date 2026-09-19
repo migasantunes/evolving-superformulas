@@ -3,6 +3,7 @@ int elite_size = 1;
 int tournament_size = 2;
 float crossover_rate = 0.5;
 float mutation_rate = 0.4;
+float alpha = 0.4; // blx-alpha paramater for the variation in between crossovers
 int resolution = 256;
 
 Population pop;

@@ -3,8 +3,8 @@ import processing.pdf.*; // Needed to export PDFs
 
 // This class represents and encodes a superformula.
 class SuperFormula {
-  
-  float[] genes = new float[14]; // Genes 0-6 are the base a, b, m, n1, n2, n3, size; genes 7-13 are how much each one changes per layer
+  int num_genes = 14;
+  float[] genes = new float[num_genes]; // Genes 0-6 are the base a, b, m, n1, n2, n3, size; genes 7-13 are how much each one changes per layer
   float fitness = 0; // Fitness value
   int num_layers = 1; // doesn't really matter the value here since fitness is chosen in the interface
   float theta_step = 0.005; // before it was 0.01, after tuning it is 0.005, no runtime loss
@@ -31,12 +31,42 @@ class SuperFormula {
     phenotype = null;
   }
 
-  // This methods keeps sigma between [0, 1]
-  float reflect(float sigma){
-    sigma = abs(sigma) % 2;
-    if (sigma > 1) {return 2 - sigma;}
-    else {return sigma;}
+  // This methods keeps x between [0, 1]
+  float reflect(float x){
+    x = abs(x) % 2;
+    if (x > 1) {return 2 - x;}
+    else {return x;}
   }
+
+  // BLX-alpha Crossover
+  SuperFormula blxAlphaCrossover(SuperFormula partner) {
+    SuperFormula child = new SuperFormula(genes);
+    
+    for (int gene = 0; gene < num_genes/2; gene++){
+      if (gene == 2){ // gene m
+        if (random(1) < 0.5){
+          child.genes[gene] = genes[gene];
+          child.genes[gene+7] = genes[gene+7];
+        } else {
+          child.genes[gene] = partner.genes[gene];
+          child.genes[gene+7] = partner.genes[gene+7];
+        }
+        continue;
+      }
+
+      // for the rest of genes will go between [min_gene - alpha, max_gene + alpha]
+      float range = random(-alpha, 1 + alpha);
+      if (genes[gene] < partner.genes[gene]){
+        child.genes[gene] = reflect(genes[gene] + range * (partner.genes[gene] - genes[gene]));
+        child.genes[gene+7] = reflect(genes[gene+7] + range * (partner.genes[gene+7] - genes[gene+7]));
+      } else {
+        child.genes[gene] = reflect(partner.genes[gene] + range * (genes[gene] - partner.genes[gene]));
+        child.genes[gene+7] = reflect(partner.genes[gene+7] + range * (genes[gene+7] - partner.genes[gene+7]));
+      }
+    }
+
+    return child;
+  } 
   
   // One-point crossover operator
   SuperFormula onePointCrossover(SuperFormula partner) {
