@@ -6,7 +6,7 @@ class SuperFormula {
   
   float[] genes = new float[14]; // Genes 0-6 are the base a, b, m, n1, n2, n3, size; genes 7-13 are how much each one changes per layer
   float fitness = 0; // Fitness value
-  int num_layers = 5; // doesn't really matter the value here since fitness is chosen in the interface
+  int num_layers = 1; // doesn't really matter the value here since fitness is chosen in the interface
   float theta_step = 0.005; // before it was 0.01, after tuning it is 0.005, no runtime loss
   ArrayList<ArrayList<PVector>> layers = new ArrayList<ArrayList<PVector>>();
   PImage phenotype = null;
@@ -29,6 +29,13 @@ class SuperFormula {
       genes[i] = random(0, 1);
     }
     phenotype = null;
+  }
+
+  // This methods keeps sigma between [0, 1]
+  float reflect(float sigma){
+    sigma = abs(sigma) % 2;
+    if (sigma > 1) {return 2 - sigma;}
+    else {return sigma;}
   }
   
   // One-point crossover operator

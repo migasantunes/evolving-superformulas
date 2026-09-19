@@ -6,7 +6,7 @@ class SuperFormula {
   
   float[] genes = new float[14]; // Genes 0-6 are the base a, b, m, n1, n2, n3, size; genes 7-13 are how much each one changes per layer
   float fitness = 0; // Fitness value
-  int num_layers = 6; // Even if 6 is slower it gets more results then lower values, more than that it becomes too slow
+  int num_layers = 1; // Even if 6 is slower it gets more results then lower values, more than that it becomes too slow
   float theta_step = 0.005; // before it was 0.01, after tuning it is 0.005, no runtime loss
   ArrayList<ArrayList<PVector>> layers = new ArrayList<ArrayList<PVector>>();
   
