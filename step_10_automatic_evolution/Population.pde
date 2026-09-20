@@ -48,8 +48,6 @@ class Population {
       if (random(1) <= crossover_rate) {
         SuperFormula parent1 = rouletteSelection();
         SuperFormula parent2 = rouletteSelection();
-        //SuperFormula child = parent1.onePointCrossover(parent2);
-        //SuperFormula child = parent1.uniformCrossover(parent2);
         SuperFormula child = parent1.blxAlphaCrossover(parent2);
         new_generation[i] = child;
       } else {
@@ -81,25 +79,6 @@ class Population {
     generations++;
   }
   
-  // Select one individual using a tournament selection 
-  SuperFormula tournamentSelection() {
-    int tournament_size = 3;
-    // Select a random set of individuals from the population
-    SuperFormula[] tournament = new SuperFormula[tournament_size];
-    for (int i = 0; i < tournament.length; i++) {
-      int random_index = int(random(0, individuals.length));
-      tournament[i] = individuals[random_index];
-    }
-    // Get the fittest individual from the selected individuals
-    SuperFormula fittest = tournament[0];
-    for (int i = 1; i < tournament.length; i++) {
-      if (tournament[i].getFitness() > fittest.getFitness()) {
-        fittest = tournament[i];
-      }
-    }
-    return fittest;
-
-  }
     SuperFormula rouletteSelection() {
     float totalFitness = 0;
     for (SuperFormula indiv : individuals){

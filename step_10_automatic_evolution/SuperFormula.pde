@@ -7,7 +7,6 @@ class SuperFormula {
   float[] genes = new float[num_genes]; // Genes 0-6 are the base a, b, m, n1, n2, n3, size; genes 7-13 are how much each one changes per layer
   float[] sigmas = new float[num_genes]; // sigma for each gene for Self-adaptive mutation
   float fitness = 0; // Fitness value
-  int num_layers = 3; // Even if 6 is slower it gets more results then lower values, more than that it becomes too slow
   float theta_step = 0.005; // before it was 0.01, after tuning it is 0.005, no runtime loss
   ArrayList<ArrayList<PVector>> layers = new ArrayList<ArrayList<PVector>>();
   PImage phenotype = null;
@@ -15,7 +14,7 @@ class SuperFormula {
   // Create a random SuperFormula
   SuperFormula() {
     randomize();
-    Arrays.fill(sigmas, 0.1);
+    Arrays.fill(sigmas, 0.02); // Initial sigma values for self-adaptive mutation
   }
   
   // Create a SuperFormula with the given genes
@@ -49,10 +48,10 @@ class SuperFormula {
       if (gene == 2){ // gene m
         if (random(1) < 0.5){
           child.genes[gene] = genes[gene];
-          child.genes[gene+7] = genes[gene+7];
+          child.genes[gene + num_genes/2] = genes[gene + num_genes/2];
         } else {
           child.genes[gene] = partner.genes[gene];
-          child.genes[gene+7] = partner.genes[gene+7];
+          child.genes[gene + num_genes/2] = partner.genes[gene + num_genes/2];
         }
         continue;
       }
@@ -61,10 +60,10 @@ class SuperFormula {
       float range = random(-alpha, 1 + alpha);
       if (genes[gene] < partner.genes[gene]){
         child.genes[gene] = reflect(genes[gene] + range * (partner.genes[gene] - genes[gene]));
-        child.genes[gene+7] = reflect(genes[gene+7] + range * (partner.genes[gene+7] - genes[gene+7]));
+        child.genes[gene + num_genes/2] = reflect(genes[gene + num_genes/2] + range * (partner.genes[gene + num_genes/2] - genes[gene + num_genes/2]));
       } else {
         child.genes[gene] = reflect(partner.genes[gene] + range * (genes[gene] - partner.genes[gene]));
-        child.genes[gene+7] = reflect(partner.genes[gene+7] + range * (genes[gene+7] - partner.genes[gene+7]));
+        child.genes[gene + num_genes/2] = reflect(partner.genes[gene + num_genes/2] + range * (genes[gene + num_genes/2] - partner.genes[gene + num_genes/2]));
       }
     }
 
@@ -75,40 +74,13 @@ class SuperFormula {
 
     return child;
   } 
-  
-  // One-point crossover operator
-  SuperFormula onePointCrossover(SuperFormula partner) {
-    SuperFormula child = new SuperFormula();
-    int crossover_point = int(random(1, num_genes - 1));
-    for (int i = 0; i < num_genes; i++) {
-      if (i < crossover_point) {
-        child.genes[i] = genes[i];
-      } else {
-        child.genes[i] = partner.genes[i];
-      }
-    }
-    return child;
-  }
-  
-  // Uniform crossover operator
-  SuperFormula uniformCrossover(SuperFormula partner) {
-    SuperFormula child = new SuperFormula();
-    for (int i = 0; i < num_genes; i++) {
-      if (random(1) < 0.5) {
-        child.genes[i] = genes[i];
-      } else {
-        child.genes[i] = partner.genes[i];
-      }
-    }
-    return child;
-  }
-  
+
   // Mutation operator
   void mutate() {
     float n = randomGaussian();
     
     for (int i = 0; i < num_genes; i++) {
-      sigmas[i] = constrain(sigmas[i] * exp(t1 * n + t2 * randomGaussian()), 0.01, 0.5);
+      sigmas[i] = constrain(sigmas[i] * exp(t1 * n + t2 * randomGaussian()), sigma_min, sigma_max); 
       
       genes[i] = reflect(genes[i] + sigmas[i] * randomGaussian());
     }
@@ -195,7 +167,7 @@ class SuperFormula {
       float n1 = constrain(0.1 + genes[3] * 19.9 + i * (genes[10]  - 0.5) * 2 * 19.9 / layer_denom, 0.1, 20);
       float n2 = constrain(0.1 + genes[4] * 19.9 + i * (genes[11] - 0.5) * 2 * 19.9 / layer_denom, 0.1, 20);
       float n3 = constrain(0.1 + genes[5] * 19.9 + i * (genes[12] - 0.5) * 2 * 19.9 / layer_denom, 0.1, 20);
-      float size = constrain(0.1 + genes[6] * 1.9 + i * (genes[13] - 0.5) * 2 * 1.9 / layer_denom, 0.1, 2);
+      float size = constrain(0.1 + genes[6] * 1.1 + i * (genes[13] - 0.5) * 2 * 1.1 / layer_denom, 0.1, 1.2);
 
       float[] p = {a, b, m, n1, n2, n3, size};
 
@@ -252,10 +224,11 @@ class SuperFormula {
     pdf.dispose();
     pdf.endDraw();
     
+    String[] titles = {"a", "b", "m", "n1", "n2", "n3", "size", "a_step", "b_step", "m_step", "n1_step", "n2_step", "n3_step", "size_step"};
     String[] output_text_lines = new String[num_genes*2];
     for (int i = 0; i < num_genes; i++) {
-      output_text_lines[i] = str(genes[i]);
-      output_text_lines[i+num_genes] = str(sigmas[i]);
+      output_text_lines[i] = titles[i] + ": " + str(genes[i]);
+      output_text_lines[i+num_genes] = "sigma_" + titles[i] + ": " + str(sigmas[i]);
     }
     saveStrings(output_path + ".txt", output_text_lines);
   }

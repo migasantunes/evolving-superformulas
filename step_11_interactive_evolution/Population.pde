@@ -70,75 +70,23 @@ class Population {
     // Increment the number of generations
     generations++;
   }
-  
-  /**
-   * Return one individual selected using tournament.
-   */
-  SuperFormula tournamentSelectionV2() {
-    // Define pool of individuals from which one will be selected by tournament
-    SuperFormula[] selectionPool;
-    ArrayList<SuperFormula> prefferedIndividuals = getPreferredIndivsShuffled();
-    if (prefferedIndividuals.size() > 1) {
-      Collections.shuffle(prefferedIndividuals);
-      selectionPool = prefferedIndividuals.toArray(new SuperFormula[0]);
-    } else if (prefferedIndividuals.size() == 1) {
-      return prefferedIndividuals.get(0);
-    } else {
-      selectionPool = individuals;
-    }
-    
-    // Select a set of individuals at random
-    SuperFormula[] tournament = new SuperFormula[tournament_size];
-    for (int i = 0; i < tournament.length; i++) {
-      int randomIndex = int(random(0, selectionPool.length));
-      tournament[i] = selectionPool[randomIndex];
-    }
-
-    // Return the fittest individual from the selected ones
-    SuperFormula fittest = tournament[0];
-    for (int i = 1; i < tournament.length; i++) {
-      if (tournament[i].getFitness() > fittest.getFitness()) {
-        fittest = tournament[i];
-      }
-    }
-    return fittest;
-  }
-  
-  // Select one individual using a tournament selection 
-  SuperFormula tournamentSelection() {
-    // Select a random set of individuals from the population
-    SuperFormula[] tournament = new SuperFormula[tournament_size];
-    for (int i = 0; i < tournament.length; i++) {
-      int random_index = int(random(0, individuals.length));
-      tournament[i] = individuals[random_index];
-    }
-    // Get the fittest individual from the selected individuals
-    SuperFormula fittest = tournament[0];
-    for (int i = 1; i < tournament.length; i++) {
-      if (tournament[i].getFitness() > fittest.getFitness()) {
-        fittest = tournament[i];
-      }
-    }
-    return fittest;
-  }
 
   SuperFormula rouletteSelection() {
     float totalFitness = 0;
     for (SuperFormula indiv : individuals){
-      totalFitness = totalFitness + indiv.getFitness();
+      totalFitness = totalFitness + wheelWeight(indiv);
     }
     
-    // If every fitness is 0 there is one individual chosen at random
+    // Fallback if every rating is 0 and unrated_weight is 0: there is one individual chosen at random
     if (totalFitness == 0){
-      int random_index = int(random(0, individuals.length));
-      return individuals[random_index];
+      return individuals[int(random(0, individuals.length))];
     }
 
     float hit = random(totalFitness);
     float addedFit = 0;
 
     for (SuperFormula indiv : individuals){
-      addedFit = addedFit + indiv.getFitness();
+      addedFit = addedFit + wheelWeight(indiv);
       if (hit < addedFit){
         return indiv;
       }
@@ -147,6 +95,11 @@ class Population {
     return individuals[individuals.length - 1];
   }
   
+  float wheelWeight(SuperFormula indiv) {
+    float fit = indiv.getFitness();
+    return (fit > 0) ? fit : unrated_weight;
+  }
+
   int getEliteCount() {
     for (int i = 0; i < elite_max; i++){
       int fit = (int) individuals[i].getFitness();
@@ -159,19 +112,6 @@ class Population {
     }
     
     return elite_max;
-  }
-
-  /**
-   * Returns list with individuals with fitness greater than zero.
-   */
-  ArrayList<SuperFormula> getPreferredIndivsShuffled() {
-    ArrayList<SuperFormula> output = new ArrayList<SuperFormula>();
-    for (SuperFormula indiv : individuals) {
-      if (indiv.getFitness() > 0) {
-        output.add(indiv);
-      }
-    }
-    return output;
   }
   
   // Sort individuals in the population by fitness in descending order (fittest first)

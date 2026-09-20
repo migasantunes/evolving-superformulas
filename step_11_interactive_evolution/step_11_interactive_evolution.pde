@@ -1,6 +1,8 @@
 int population_size = 30;
-int tournament_size = 2;
 int resolution = 256; 
+int num_layers = 1;
+int num_genes = 14;
+float unrated_weight = 0.5; // share of the wheel an unrated individual gets
 // Crossover
 float crossover_rate = 0.5;
 float alpha = 0.4; // blx-alpha paramater for the variation in between crossovers

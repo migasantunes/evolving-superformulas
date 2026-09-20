@@ -1,14 +1,17 @@
 int population_size = 100;
 int elite_size = 1;
 int resolution = 128;
-String path_target_image = "glyphs_1693591751539/test3.png";
+String path_target_image = "glyphs_1693591751539/test5.png";
 int num_genes = 14;
+int num_layers = 1;
 // Crossover
 float crossover_rate = 0.5;
 float alpha = 0.5; // blx-alpha paramater for the variation in between crossovers
 // Mutation
 float t1 = 1 / sqrt(2 * num_genes);
 float t2 = 1 / sqrt(2 * sqrt(num_genes));
+float sigma_min = 0.005;
+float sigma_max = 0.5;
 
 Population pop;
 PVector[][] cells;

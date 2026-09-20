@@ -3,10 +3,8 @@ import processing.pdf.*; // Needed to export PDFs
 
 // This class represents and encodes a superformula.
 class SuperFormula {
-  int num_genes = 14;
   float[] genes = new float[num_genes]; // Genes 0-6 are the base a, b, m, n1, n2, n3, size; genes 7-13 are how much each one changes per layer
   float fitness = 0; // Fitness value
-  int num_layers = 3; // doesn't really matter the value here since fitness is chosen in the interface
   float theta_step = 0.005; // before it was 0.01, after tuning it is 0.005, no runtime loss
   ArrayList<ArrayList<PVector>> layers = new ArrayList<ArrayList<PVector>>();
   PImage phenotype = null;
@@ -46,10 +44,10 @@ class SuperFormula {
       if (gene == 2){ // gene m
         if (random(1) < 0.5){
           child.genes[gene] = genes[gene];
-          child.genes[gene+7] = genes[gene+7];
+          child.genes[gene + num_genes/2] = genes[gene + num_genes/2];
         } else {
           child.genes[gene] = partner.genes[gene];
-          child.genes[gene+7] = partner.genes[gene+7];
+          child.genes[gene + num_genes/2] = partner.genes[gene + num_genes/2];
         }
         continue;
       }
@@ -58,10 +56,10 @@ class SuperFormula {
       float range = random(-alpha, 1 + alpha);
       if (genes[gene] < partner.genes[gene]){
         child.genes[gene] = reflect(genes[gene] + range * (partner.genes[gene] - genes[gene]));
-        child.genes[gene+7] = reflect(genes[gene+7] + range * (partner.genes[gene+7] - genes[gene+7]));
+        child.genes[gene + num_genes/2] = reflect(genes[gene + num_genes/2] + range * (partner.genes[gene + num_genes/2] - genes[gene + num_genes/2]));
       } else {
         child.genes[gene] = reflect(partner.genes[gene] + range * (genes[gene] - partner.genes[gene]));
-        child.genes[gene+7] = reflect(partner.genes[gene+7] + range * (genes[gene+7] - partner.genes[gene+7]));
+        child.genes[gene + num_genes/2] = reflect(partner.genes[gene + num_genes/2] + range * (genes[gene + num_genes/2] - partner.genes[gene + num_genes/2]));
       }
     }
 
@@ -149,7 +147,7 @@ class SuperFormula {
     render(canvas, canvas.width / 2, canvas.height / 2, canvas.width, canvas.height);
     canvas.endDraw();
     phenotype = canvas.copy();
-    return canvas;
+    return phenotype;
   }
   
   // Draw the superformula layers on a given canvas, at a given position and with a given size
@@ -197,7 +195,7 @@ class SuperFormula {
       float n1 = constrain(0.1 + genes[3] * 19.9 + i * (genes[10]  - 0.5) * 2 * 19.9 / layer_denom, 0.1, 20);
       float n2 = constrain(0.1 + genes[4] * 19.9 + i * (genes[11] - 0.5) * 2 * 19.9 / layer_denom, 0.1, 20);
       float n3 = constrain(0.1 + genes[5] * 19.9 + i * (genes[12] - 0.5) * 2 * 19.9 / layer_denom, 0.1, 20);
-      float size = constrain(0.1 + genes[6] * 1.9 + i * (genes[13] - 0.5) * 2 * 1.9 / layer_denom, 0.1, 2);
+      float size = constrain(0.1 + genes[6] * 1.1 + i * (genes[13] - 0.5) * 2 * 1.1 / layer_denom, 0.1, 1.2);
 
       float[] p = {a, b, m, n1, n2, n3, size};
 
@@ -254,9 +252,10 @@ class SuperFormula {
     pdf.dispose();
     pdf.endDraw();
     
+    String[] titles = {"a", "b", "m", "n1", "n2", "n3", "size", "a_step", "b_step", "m_step", "n1_step", "n2_step", "n3_step", "size_step"};
     String[] output_text_lines = new String[num_genes];
     for (int i = 0; i < num_genes; i++) {
-      output_text_lines[i] = str(genes[i]);
+      output_text_lines[i] = titles[i] + ": " + str(genes[i]);
     }
     saveStrings(output_path + ".txt", output_text_lines);
   }
