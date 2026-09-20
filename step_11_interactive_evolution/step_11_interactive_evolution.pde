@@ -1,6 +1,6 @@
 int population_size = 30;
 int resolution = 256; 
-int num_layers = 1;
+int num_layers = 5;
 int num_genes = 14;
 float unrated_weight = 0.5; // share of the wheel an unrated individual gets
 // Crossover

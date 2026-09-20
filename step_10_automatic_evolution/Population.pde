@@ -46,12 +46,12 @@ class Population {
     // Create (breed) new individuals with crossover
     for (int i = elite_size; i < new_generation.length; i++) {
       if (random(1) <= crossover_rate) {
-        SuperFormula parent1 = rouletteSelection();
-        SuperFormula parent2 = rouletteSelection();
+        SuperFormula parent1 = rouletteSelectionLinearRanking();
+        SuperFormula parent2 = rouletteSelectionLinearRanking();
         SuperFormula child = parent1.blxAlphaCrossover(parent2);
         new_generation[i] = child;
       } else {
-        new_generation[i] = rouletteSelection().getCopy();
+        new_generation[i] = rouletteSelectionLinearRanking().getCopy();
       }
     }
     
@@ -79,31 +79,24 @@ class Population {
     generations++;
   }
   
-    SuperFormula rouletteSelection() {
-    float totalFitness = 0;
-    for (SuperFormula indiv : individuals){
-      totalFitness = totalFitness + indiv.getFitness();
-    }
-    
-    // If every fitness is 0 there is one individual chosen at random
-    if (totalFitness == 0){
-      int random_index = int(random(0, individuals.length));
-      return individuals[random_index];
-    }
-
-    float hit = random(totalFitness);
+  SuperFormula rouletteSelectionLinearRanking() {
+    int n = individuals.length;
+    float hit = random(n); // the linear-rank weights always add up to the population size
     float addedFit = 0;
-
-    for (SuperFormula indiv : individuals){
-      addedFit = addedFit + indiv.getFitness();
-      if (hit < addedFit){
-        return indiv;
+    for (int i = 0; i < n; i++) {
+      addedFit = addedFit + rankWeight(i, n);
+      if (hit < addedFit) {
+        return individuals[i];
       }
     }
-
-    return individuals[individuals.length - 1];
+    return individuals[n - 1];
   }
-  
+
+  // Linear ranking formula
+  float rankWeight(int rank, int n) {
+    return 2 - selection_pressure + 2 * (selection_pressure - 1) * (n - 1 - rank) / (float) (n - 1);
+  }
+
   // Sort individuals in the population by fitness in descending order (fittest first)
   void sortIndividualsByFitness() {
     Arrays.sort(individuals, new Comparator<SuperFormula>() {

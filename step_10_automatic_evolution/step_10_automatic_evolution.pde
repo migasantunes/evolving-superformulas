@@ -1,9 +1,10 @@
 int population_size = 100;
 int elite_size = 1;
 int resolution = 128;
-String path_target_image = "glyphs_1693591751539/test5.png";
+String path_target_image = "glyphs_1693591751539/test6.png";
 int num_genes = 14;
-int num_layers = 1;
+int num_layers = 5;
+float selection_pressure = 1.8; // linear ranking pressure for the roulette wheel range [1, 2]
 // Crossover
 float crossover_rate = 0.5;
 float alpha = 0.5; // blx-alpha paramater for the variation in between crossovers
@@ -11,7 +12,7 @@ float alpha = 0.5; // blx-alpha paramater for the variation in between crossover
 float t1 = 1 / sqrt(2 * num_genes);
 float t2 = 1 / sqrt(2 * sqrt(num_genes));
 float sigma_min = 0.005;
-float sigma_max = 0.5;
+float sigma_max = 0.1;
 
 Population pop;
 PVector[][] cells;
