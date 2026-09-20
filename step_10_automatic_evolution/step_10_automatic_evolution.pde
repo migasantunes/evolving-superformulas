@@ -101,8 +101,8 @@ void drawStatusBar() {
   fill(phenotype_mode ? 60 : 200);
   textAlign(LEFT, TOP);
   textSize(13);
-  text("generation " + pop.getGenerations() + "     layers " + num_layers + (paused ? "     [PAUSED]" : ""), text_x, bar_y + 12);
-  text("best " + nf(best, 0, 4) + "     mean " + nf(mean, 0, 4) + "     mean/best " + nf(best > 0 ? mean / best : 0, 0, 3), text_x, bar_y + 34);
+  text("Generation: " + pop.getGenerations() + "     Nº layers: " + num_layers + (paused ? "     [PAUSED]" : ""), text_x, bar_y + 12);
+  text("Best Fitness: " + nf(best, 0, 4) + "     Mean Fitness of the population: " + nf(mean, 0, 4), text_x, bar_y + 34);
   fill(phenotype_mode ? 120 : 140);
   text("[p] pause     [n] one generation     [r] restart     [e] export best     [space] points view     [f] fitness labels", text_x, bar_y + 64);
 }
