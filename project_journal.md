@@ -119,6 +119,18 @@
 - Children get the average of the parents' sigmas
 - Replacement stays generational with an elite of 1
 
+## Day 5
+
+### Replacing RMSE with a multi-scale Dice coefficient
+- Thin targets kept evolving to an empty canvas with a high fitness, so I was thinking the cause was the RMSE
+- Replaced it with a multi-scale Dice coefficient, which is a better measure of shape similarity than RMSE, and is less sensitive to the target's sparsity
+- The Dice coefficient is calculated at multiple scales and averaged, which helps to capture the shape at different levels of detail
+
+### Speeding up the render
+- calculatePoints swept theta twice per layer, once for max_rad and once to build the points, so r() was paid twice for every point; now it sweeps once and keeps the radii (both steps)
+- Step 10 had no phenotype cache, so every individual was drawn twice per generation, once for the fitness and once for draw(); copied the cache from step 11
+- The 1px stroke floor was an RMSE-era workaround; with binarised ink maps it no longer matters (0.993 correlation with it, 0.992 without), kept it because it makes the ink map depend only on geometry
+
 ## Notes
 - everything about the drawing style needs implementing as a gene (stroke weight, stroke color, fill color, etc.) as prof said
 - step_scale could be made evolvable later, if a fixed value turns out to limit the population

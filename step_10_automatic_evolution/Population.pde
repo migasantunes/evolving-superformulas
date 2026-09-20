@@ -46,14 +46,14 @@ class Population {
     // Create (breed) new individuals with crossover
     for (int i = elite_size; i < new_generation.length; i++) {
       if (random(1) <= crossover_rate) {
-        SuperFormula parent1 = tournamentSelection();
-        SuperFormula parent2 = tournamentSelection();
+        SuperFormula parent1 = rouletteSelection();
+        SuperFormula parent2 = rouletteSelection();
         //SuperFormula child = parent1.onePointCrossover(parent2);
         //SuperFormula child = parent1.uniformCrossover(parent2);
         SuperFormula child = parent1.blxAlphaCrossover(parent2);
         new_generation[i] = child;
       } else {
-        new_generation[i] = tournamentSelection().getCopy();
+        new_generation[i] = rouletteSelection().getCopy();
       }
     }
     
@@ -83,6 +83,7 @@ class Population {
   
   // Select one individual using a tournament selection 
   SuperFormula tournamentSelection() {
+    int tournament_size = 3;
     // Select a random set of individuals from the population
     SuperFormula[] tournament = new SuperFormula[tournament_size];
     for (int i = 0; i < tournament.length; i++) {
@@ -97,6 +98,31 @@ class Population {
       }
     }
     return fittest;
+
+  }
+    SuperFormula rouletteSelection() {
+    float totalFitness = 0;
+    for (SuperFormula indiv : individuals){
+      totalFitness = totalFitness + indiv.getFitness();
+    }
+    
+    // If every fitness is 0 there is one individual chosen at random
+    if (totalFitness == 0){
+      int random_index = int(random(0, individuals.length));
+      return individuals[random_index];
+    }
+
+    float hit = random(totalFitness);
+    float addedFit = 0;
+
+    for (SuperFormula indiv : individuals){
+      addedFit = addedFit + indiv.getFitness();
+      if (hit < addedFit){
+        return indiv;
+      }
+    }
+
+    return individuals[individuals.length - 1];
   }
   
   // Sort individuals in the population by fitness in descending order (fittest first)

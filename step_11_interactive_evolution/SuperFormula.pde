@@ -6,7 +6,7 @@ class SuperFormula {
   int num_genes = 14;
   float[] genes = new float[num_genes]; // Genes 0-6 are the base a, b, m, n1, n2, n3, size; genes 7-13 are how much each one changes per layer
   float fitness = 0; // Fitness value
-  int num_layers = 6; // doesn't really matter the value here since fitness is chosen in the interface
+  int num_layers = 3; // doesn't really matter the value here since fitness is chosen in the interface
   float theta_step = 0.005; // before it was 0.01, after tuning it is 0.005, no runtime loss
   ArrayList<ArrayList<PVector>> layers = new ArrayList<ArrayList<PVector>>();
   PImage phenotype = null;
@@ -203,17 +203,27 @@ class SuperFormula {
 
       float theta_max = (p[2] % 2 == 0) ? TWO_PI : 2 * TWO_PI; // Odd m only closes after two turns
 
+      int capacity = (int) Math.ceil(theta_max / theta_step) + 2;
+      double[] radii = new double[capacity];
+      float[] thetas = new float[capacity];
+      int num_points = 0;
+
       max_rad = 0;
       for (float theta = 0; theta < theta_max; theta += theta_step) {
-        max_rad = Math.max(max_rad, r(theta, p));
+        if (num_points >= capacity) break; // float drift could otherwise run past the array
+        double rad = r(theta, p);
+        thetas[num_points] = theta;
+        radii[num_points] = rad;
+        max_rad = Math.max(max_rad, rad);
+        num_points++;
       }
-      
+
       scale = p[6] * min(w, h) / 2 / max_rad;
 
       ArrayList<PVector> points = new ArrayList<PVector>();
-      for (float theta = 0; theta < theta_max; theta += theta_step) {
-        float rad = (float) (r(theta, p) * scale);
-        points.add(new PVector(rad * cos(theta), rad * sin(theta)));
+      for (int s = 0; s < num_points; s++) {
+        float rad = (float) (radii[s] * scale);
+        points.add(new PVector(rad * cos(thetas[s]), rad * sin(thetas[s])));
       }
       layers.add(points);
     }

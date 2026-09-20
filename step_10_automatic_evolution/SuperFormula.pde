@@ -7,10 +7,11 @@ class SuperFormula {
   float[] genes = new float[num_genes]; // Genes 0-6 are the base a, b, m, n1, n2, n3, size; genes 7-13 are how much each one changes per layer
   float[] sigmas = new float[num_genes]; // sigma for each gene for Self-adaptive mutation
   float fitness = 0; // Fitness value
-  int num_layers = 6; // Even if 6 is slower it gets more results then lower values, more than that it becomes too slow
+  int num_layers = 3; // Even if 6 is slower it gets more results then lower values, more than that it becomes too slow
   float theta_step = 0.005; // before it was 0.01, after tuning it is 0.005, no runtime loss
   ArrayList<ArrayList<PVector>> layers = new ArrayList<ArrayList<PVector>>();
-  
+  PImage phenotype = null;
+
   // Create a random SuperFormula
   SuperFormula() {
     randomize();
@@ -30,6 +31,7 @@ class SuperFormula {
     for (int i = 0; i < num_genes; i++) {
       genes[i] = random(0, 1);
     }
+    phenotype = null;
   }
 
   // This methods keeps x between [0, 1]
@@ -110,6 +112,7 @@ class SuperFormula {
       
       genes[i] = reflect(genes[i] + sigmas[i] * randomGaussian());
     }
+    phenotype = null;
   }
   
   // Set the fitness value
@@ -126,11 +129,15 @@ class SuperFormula {
   SuperFormula getCopy() {
     SuperFormula copy = new SuperFormula(genes, sigmas);
     copy.fitness = fitness;
+    copy.phenotype = phenotype;
     return copy;
   }
-  
+
   // Get the phenotype (image)
   PImage getPhenotype(int resolution) {
+    if (phenotype != null && phenotype.height == resolution) {
+      return phenotype;
+    }
     PGraphics canvas = createGraphics(resolution, resolution);
     canvas.beginDraw();
     canvas.background(255);
@@ -139,7 +146,8 @@ class SuperFormula {
     canvas.strokeWeight(max(1, canvas.height * 0.002)); // floor of 1 pixel so the stroke doesn't go sub-pixel at low resolutions
     render(canvas, canvas.width / 2, canvas.height / 2, canvas.width, canvas.height);
     canvas.endDraw();
-    return canvas;
+    phenotype = canvas.copy();
+    return phenotype;
   }
   
   // Draw the superformula layers on a given canvas, at a given position and with a given size
@@ -193,17 +201,27 @@ class SuperFormula {
 
       float theta_max = (p[2] % 2 == 0) ? TWO_PI : 2 * TWO_PI; // Odd m only closes after two turns
 
+      int capacity = (int) Math.ceil(theta_max / theta_step) + 2;
+      double[] radii = new double[capacity];
+      float[] thetas = new float[capacity];
+      int num_points = 0;
+
       max_rad = 0;
       for (float theta = 0; theta < theta_max; theta += theta_step) {
-        max_rad = Math.max(max_rad, r(theta, p));
+        if (num_points >= capacity) break; 
+        double rad = r(theta, p);
+        thetas[num_points] = theta;
+        radii[num_points] = rad;
+        max_rad = Math.max(max_rad, rad);
+        num_points++;
       }
-      
+
       scale = p[6] * min(w, h) / 2 / max_rad;
 
       ArrayList<PVector> points = new ArrayList<PVector>();
-      for (float theta = 0; theta < theta_max; theta += theta_step) {
-        float rad = (float) (r(theta, p) * scale);
-        points.add(new PVector(rad * cos(theta), rad * sin(theta)));
+      for (int s = 0; s < num_points; s++) {
+        float rad = (float) (radii[s] * scale);
+        points.add(new PVector(rad * cos(thetas[s]), rad * sin(thetas[s])));
       }
       layers.add(points);
     }
