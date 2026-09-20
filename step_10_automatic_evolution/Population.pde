@@ -58,6 +58,7 @@ class Population {
     }
     
     // Mutate new individuals
+    
     for (int i = elite_size; i < new_generation.length; i++) {
       new_generation[i].mutate();
     }

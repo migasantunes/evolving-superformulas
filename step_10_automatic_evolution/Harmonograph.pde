@@ -7,6 +7,7 @@ class Harmonograph {
   float fitness = 0; // Fitness value
   float time_max = 150;
   float time_step = 0.05;
+  float mutation_rate = 0.1;
   ArrayList<PVector> points = new ArrayList<PVector>();
   
   // Create a random harmonograph

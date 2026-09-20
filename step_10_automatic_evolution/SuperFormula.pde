@@ -1,31 +1,33 @@
 import processing.pdf.*; // Needed to export PDFs
-
+import java.util.ArrayList;
 
 // This class represents and encodes a superformula.
 class SuperFormula {
   
-  int num_genes = 14;
   float[] genes = new float[num_genes]; // Genes 0-6 are the base a, b, m, n1, n2, n3, size; genes 7-13 are how much each one changes per layer
+  float[] sigmas = new float[num_genes]; // sigma for each gene for Self-adaptive mutation
   float fitness = 0; // Fitness value
-  int num_layers = 1; // Even if 6 is slower it gets more results then lower values, more than that it becomes too slow
+  int num_layers = 6; // Even if 6 is slower it gets more results then lower values, more than that it becomes too slow
   float theta_step = 0.005; // before it was 0.01, after tuning it is 0.005, no runtime loss
   ArrayList<ArrayList<PVector>> layers = new ArrayList<ArrayList<PVector>>();
   
   // Create a random SuperFormula
   SuperFormula() {
     randomize();
+    Arrays.fill(sigmas, 0.1);
   }
   
   // Create a SuperFormula with the given genes
-  SuperFormula(float[] genes_init) {
+  SuperFormula(float[] genes_init, float[] sigmas_init) {
     for (int i = 0; i < genes_init.length; i++) {
       genes[i] = genes_init[i];
+      sigmas[i] = sigmas_init[i];
     }
   }
   
   // Set all genes to random values 
   void randomize() {
-    for (int i = 0; i < genes.length; i++) {
+    for (int i = 0; i < num_genes; i++) {
       genes[i] = random(0, 1);
     }
   }
@@ -39,7 +41,7 @@ class SuperFormula {
 
   // BLX-alpha Crossover
   SuperFormula blxAlphaCrossover(SuperFormula partner) {
-    SuperFormula child = new SuperFormula(genes);
+    SuperFormula child = new SuperFormula(genes, sigmas);
     
     for (int gene = 0; gene < num_genes/2; gene++){
       if (gene == 2){ // gene m
@@ -64,14 +66,19 @@ class SuperFormula {
       }
     }
 
+    // Averaging the sigmas for the child
+    for (int i = 0; i < num_genes; i++){
+      child.sigmas[i] = (sigmas[i] + partner.sigmas[i]) / 2;
+    }
+
     return child;
   } 
   
   // One-point crossover operator
   SuperFormula onePointCrossover(SuperFormula partner) {
     SuperFormula child = new SuperFormula();
-    int crossover_point = int(random(1, genes.length - 1));
-    for (int i = 0; i < genes.length; i++) {
+    int crossover_point = int(random(1, num_genes - 1));
+    for (int i = 0; i < num_genes; i++) {
       if (i < crossover_point) {
         child.genes[i] = genes[i];
       } else {
@@ -84,7 +91,7 @@ class SuperFormula {
   // Uniform crossover operator
   SuperFormula uniformCrossover(SuperFormula partner) {
     SuperFormula child = new SuperFormula();
-    for (int i = 0; i < genes.length; i++) {
+    for (int i = 0; i < num_genes; i++) {
       if (random(1) < 0.5) {
         child.genes[i] = genes[i];
       } else {
@@ -96,11 +103,12 @@ class SuperFormula {
   
   // Mutation operator
   void mutate() {
-    for (int i = 0; i < genes.length; i++) {
-      if (random(1) <= mutation_rate) {
-        genes[i] = random(1); // Replace gene with a random one
-        //genes[i] = constrain(genes[i] + random(-0.2, 0.2), 0, 1); // Adjust the value of the gene
-      }
+    float n = randomGaussian();
+    
+    for (int i = 0; i < num_genes; i++) {
+      sigmas[i] = constrain(sigmas[i] * exp(t1 * n + t2 * randomGaussian()), 0.01, 0.5);
+      
+      genes[i] = reflect(genes[i] + sigmas[i] * randomGaussian());
     }
   }
   
@@ -116,7 +124,7 @@ class SuperFormula {
   
   // Get a clean copy
   SuperFormula getCopy() {
-    SuperFormula copy = new SuperFormula(genes);
+    SuperFormula copy = new SuperFormula(genes, sigmas);
     copy.fitness = fitness;
     return copy;
   }
@@ -226,9 +234,10 @@ class SuperFormula {
     pdf.dispose();
     pdf.endDraw();
     
-    String[] output_text_lines = new String[genes.length];
-    for (int i = 0; i < genes.length; i++) {
+    String[] output_text_lines = new String[num_genes*2];
+    for (int i = 0; i < num_genes; i++) {
       output_text_lines[i] = str(genes[i]);
+      output_text_lines[i+num_genes] = str(sigmas[i]);
     }
     saveStrings(output_path + ".txt", output_text_lines);
   }

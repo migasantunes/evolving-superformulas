@@ -6,7 +6,7 @@ class SuperFormula {
   int num_genes = 14;
   float[] genes = new float[num_genes]; // Genes 0-6 are the base a, b, m, n1, n2, n3, size; genes 7-13 are how much each one changes per layer
   float fitness = 0; // Fitness value
-  int num_layers = 1; // doesn't really matter the value here since fitness is chosen in the interface
+  int num_layers = 6; // doesn't really matter the value here since fitness is chosen in the interface
   float theta_step = 0.005; // before it was 0.01, after tuning it is 0.005, no runtime loss
   ArrayList<ArrayList<PVector>> layers = new ArrayList<ArrayList<PVector>>();
   PImage phenotype = null;
@@ -25,7 +25,7 @@ class SuperFormula {
   
   // Set all genes to random values 
   void randomize() {
-    for (int i = 0; i < genes.length; i++) {
+    for (int i = 0; i < num_genes; i++) {
       genes[i] = random(0, 1);
     }
     phenotype = null;
@@ -71,8 +71,8 @@ class SuperFormula {
   // One-point crossover operator
   SuperFormula onePointCrossover(SuperFormula partner) {
     SuperFormula child = new SuperFormula();
-    int crossover_point = int(random(1, genes.length - 1));
-    for (int i = 0; i < genes.length; i++) {
+    int crossover_point = int(random(1, num_genes - 1));
+    for (int i = 0; i < num_genes; i++) {
       if (i < crossover_point) {
         child.genes[i] = genes[i];
       } else {
@@ -87,7 +87,7 @@ class SuperFormula {
     SuperFormula child1 = getCopy();
     SuperFormula child2 = partner.getCopy();
 
-    for (int i = 0; i < genes.length; i++) {
+    for (int i = 0; i < num_genes; i++) {
       if (random(1) < 0.5) {
         Float geneTemp = child1.genes[i];
         child1.genes[i] = child2.genes[i];
@@ -101,7 +101,7 @@ class SuperFormula {
   void mutate(float sigma) {
     boolean mutated = false;
 
-    for (int i = 0; i < genes.length; i++) {
+    for (int i = 0; i < num_genes; i++) {
       if (random(1) <= mutation_rate) {
         mutated = true;
         if (random(1) < reset_rate) {genes[i] = random(1); continue;} // chance of just reseting the gene, incase the population gets stuck
@@ -244,8 +244,8 @@ class SuperFormula {
     pdf.dispose();
     pdf.endDraw();
     
-    String[] output_text_lines = new String[genes.length];
-    for (int i = 0; i < genes.length; i++) {
+    String[] output_text_lines = new String[num_genes];
+    for (int i = 0; i < num_genes; i++) {
       output_text_lines[i] = str(genes[i]);
     }
     saveStrings(output_path + ".txt", output_text_lines);
