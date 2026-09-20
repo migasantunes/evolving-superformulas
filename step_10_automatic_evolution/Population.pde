@@ -49,7 +49,8 @@ class Population {
         SuperFormula parent1 = tournamentSelection();
         SuperFormula parent2 = tournamentSelection();
         //SuperFormula child = parent1.onePointCrossover(parent2);
-        SuperFormula child = parent1.uniformCrossover(parent2);
+        //SuperFormula child = parent1.uniformCrossover(parent2);
+        SuperFormula child = parent1.blxAlphaCrossover(parent2);
         new_generation[i] = child;
       } else {
         new_generation[i] = tournamentSelection().getCopy();

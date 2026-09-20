@@ -1,10 +1,13 @@
 int population_size = 100;
 int elite_size = 1;
 int tournament_size = 3;
-float crossover_rate = 0.7;
-float mutation_rate = 0.05;
 int resolution = 128;
 String path_target_image = "glyphs_1693591751539/teste1.png";
+// Crossover
+float crossover_rate = 0.5;
+float alpha = 0.5; // blx-alpha paramater for the variation in between crossovers
+// Mutation
+float mutation_rate = 0.05;
 
 Population pop;
 PVector[][] cells;
