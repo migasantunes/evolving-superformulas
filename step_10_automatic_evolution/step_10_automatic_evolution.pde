@@ -17,6 +17,13 @@ Population pop;
 PVector[][] cells;
 boolean phenotype_mode = true;
 boolean show_fitness = true;
+// Run control
+boolean paused = false; // when true the population stops evolving, so a generation can be looked at
+boolean step_once = false; // runs a single generation on the next frame, even while paused
+// Status bar
+int status_bar_h = 100; // strip at the bottom of the window holding the target and the run stats
+PImage target_display; // the target image at full size, only for showing on screen
+float label_size; // text size of the per-individual fitness labels
 
 void settings() {
   if (displayWidth <= 0 || displayHeight <= 0){
@@ -29,14 +36,17 @@ void settings() {
 
 void setup() {
   pop = new Population();
-  cells = calculateGrid(population_size, 0, 0, width, height, 30, 10, 30, true);
-  textSize(constrain(cells[0][0].z * 0.15, 11, 14));
-  textAlign(CENTER, TOP);
+  target_display = loadImage(path_target_image);
+  cells = calculateGrid(population_size, 0, 0, width, height - status_bar_h, 30, 10, 30, true);
+  label_size = constrain(cells[0][0].z * 0.15, 11, 14);
 }
 
 void draw() {
-  pop.evolve();
-  println("Current generation: " + pop.getGenerations());
+  // Evolve unless paused; [n] lets a single generation through while paused
+  if (!paused || step_once) {
+    pop.evolve();
+    step_once = false;
+  }
   background(phenotype_mode ? 235 : 0);
   float cell_dim = cells[0][0].z;
   int row = 0, col = 0;
@@ -50,7 +60,10 @@ void draw() {
       pop.getIndiv(i).renderPoints(getGraphics(), cells[row][col].x + cell_dim / 2, cells[row][col].y + cell_dim / 2, cell_dim, cell_dim);
     }
     if (show_fitness) {
+      noStroke();
       fill(phenotype_mode ? 80 : 200);
+      textAlign(CENTER, TOP);
+      textSize(label_size);
       text(nf(pop.getIndiv(i).getFitness(), 0, 4), cells[row][col].x +cell_dim / 2, cells[row][col].y + cell_dim + 2);
     }
     col += 1;
@@ -59,6 +72,39 @@ void draw() {
       col = 0;
     }
   }
+  drawStatusBar();
+}
+
+// Draw the bottom strip: the target the population is evolving towards, the run stats and the controls
+void drawStatusBar() {
+  float bar_y = height - status_bar_h;
+  float thumb = status_bar_h - 24;
+
+  noStroke();
+  fill(phenotype_mode ? 215 : 20);
+  rect(0, bar_y, width, status_bar_h);
+
+  // The target, so it is visible next to the population instead of only being a filename
+  image(target_display, 30, bar_y + 12, thumb, thumb);
+  noFill();
+  stroke(phenotype_mode ? 130 : 150);
+  strokeWeight(1);
+  rect(30, bar_y + 12, thumb, thumb);
+
+  // Best and mean fitness: their ratio is how much spread selection still has to work with,
+  // so a value close to 1 means the roulette wheel is close to picking uniformly at random
+  float best = pop.getBestFitness();
+  float mean = pop.getMeanFitness();
+  float text_x = 30 + thumb + 20;
+
+  noStroke();
+  fill(phenotype_mode ? 60 : 200);
+  textAlign(LEFT, TOP);
+  textSize(13);
+  text("generation " + pop.getGenerations() + "     layers " + num_layers + (paused ? "     [PAUSED]" : ""), text_x, bar_y + 12);
+  text("best " + nf(best, 0, 4) + "     mean " + nf(mean, 0, 4) + "     mean/best " + nf(best > 0 ? mean / best : 0, 0, 3), text_x, bar_y + 34);
+  fill(phenotype_mode ? 120 : 140);
+  text("[p] pause     [n] one generation     [r] restart     [e] export best     [space] points view     [f] fitness labels", text_x, bar_y + 64);
 }
 
 void keyReleased() {
@@ -68,6 +114,12 @@ void keyReleased() {
     phenotype_mode = !phenotype_mode;
   } else if (key == 'f') {
     show_fitness = !show_fitness;
+  } else if (key == 'p') {
+    paused = !paused;
+  } else if (key == 'n') {
+    step_once = true;
+  } else if (key == 'r') {
+    pop.initialize(); // restart from a fresh random population, generation counter included
   }
 }
 

@@ -127,4 +127,19 @@ class Population {
   int getGenerations() {
     return generations;
   }
+
+  // Get the fitness of the best individual (the population is kept sorted, so it is the first one)
+  float getBestFitness() {
+    return individuals[0].getFitness();
+  }
+
+  // Get the average fitness of the population; next to the best it shows how much spread is left
+  // for selection to act on, which is what fitness-proportional selection depends on
+  float getMeanFitness() {
+    float total = 0;
+    for (SuperFormula indiv : individuals) {
+      total = total + indiv.getFitness();
+    }
+    return total / individuals.length;
+  }
 }
