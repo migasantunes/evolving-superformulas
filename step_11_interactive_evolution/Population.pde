@@ -158,7 +158,7 @@ class Population {
       if (fit != elite_fitness) {return i;} 
     }
     
-    return elite_min;
+    return elite_max;
   }
 
   /**

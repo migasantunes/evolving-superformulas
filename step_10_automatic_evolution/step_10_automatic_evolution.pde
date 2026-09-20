@@ -2,7 +2,7 @@ int population_size = 100;
 int elite_size = 1;
 int tournament_size = 3;
 int resolution = 128;
-String path_target_image = "glyphs_1693591751539/test1.png";
+String path_target_image = "glyphs_1693591751539/O.png";
 int num_genes = 14;
 // Crossover
 float crossover_rate = 0.5;

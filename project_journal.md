@@ -90,6 +90,36 @@
 - Used the standard wheel: one random number between 0 and totalFitness, accumulate fitness, return the first individual where hit < addedFit
 - Guarded total == 0 (evolving without rating anything) with a random individual
 
+## Day 4
+
+### Choosing the operators
+- Same crossover in both modes, since the encoding is the same; different mutation, since the conditions differ (30 individuals / ~20 generations / noisy human ratings vs 100 / hundreds / deterministic RMSE)
+
+### Crossover: paired BLX-alpha (both steps)
+- One mixing fraction in [-alpha, 1+alpha] per (base, step) pair, used for both genes, so the child gets a layer progression between the parents' instead of one parent's base glued to the other's step
+- m (genes 2 and 9) is swapped as a unit, never blended: it's rounded to an int and sets the symmetry, so the average of m=4 and m=8 is a different shape, not a mix
+- alpha has to be >= 0.366, otherwise the operator shrinks the variance by itself (child variance = v/2 + (1+2*alpha)^2 * v/6); used 0.4 in step 11 and 0.5 in step 10
+- Out-of-range values are reflected instead of clamped at 0 and 1
+- Mutation stays per gene, not per pair
+
+### Mutation in step 11: annealed Gaussian
+- Rate = 0.1, and the uniform nudge became a Gaussian step scaled by sigma: mostly small, occasionally large
+- sigma decays exponentially from 0.15 to 0.03 over 25 generations
+- 5% of mutations are a random reset
+- If no gene mutated, one is forced
+
+### Elitism in step 11: threshold
+- Keeps up to 3 individuals rated 10, or the single best if it was rated at all, or none if nothing was rated
+
+### Mutation in step 10: self-adaptive Gaussian (ES)
+- One sigma per gene, stored in the individual; the sigma is mutated first and the gene then moves by that new sigma, so selection judges the step size together with the gene
+- sigma' = sigma * exp(t1\*N + t2\*Nj), with t1 = 1/sqrt(2n) and t2 = 1/sqrt(2*sqrt(n)), n = 14; Found in Introduction_to_Evolution_Algorithms.pdf
+- sigma clamped to [0.01, 0.5]
+- Every gene mutates, so mutation_rate is gone from step 10; the step size replaces it and selection tunes it
+- Children get the average of the parents' sigmas
+- Replacement stays generational with an elite of 1
+
 ## Notes
 - everything about the drawing style needs implementing as a gene (stroke weight, stroke color, fill color, etc.) as prof said
 - step_scale could be made evolvable later, if a fixed value turns out to limit the population
+- m's sigma in step 10 gets little feedback: gene 2 is rounded, so small changes often leave the shape and the fitness untouched, and that sigma mostly drifts
