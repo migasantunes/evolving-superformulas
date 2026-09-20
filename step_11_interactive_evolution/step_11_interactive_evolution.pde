@@ -1,5 +1,4 @@
 int population_size = 30;
-int elite_size = 1;
 int tournament_size = 2;
 int resolution = 256; 
 // Crossover
@@ -11,6 +10,10 @@ float reset_rate = 0.05;
 int horizonG = 25; // horizon for the annealed gaussian mutation
 float sigma_max = 0.15; // max for the annealed gaussian mutation
 float sigma_min = 0.03; // min for the annealed gaussian mutation
+// Elitism
+int elite_fitness = 10;
+int elite_max = 3;
+int elite_min = 1;
 
 Population pop;
 PVector[][] cells;

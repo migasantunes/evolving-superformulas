@@ -31,15 +31,15 @@ class Population {
     sortIndividualsByFitness();
     
     // Count number of individuals with fitness score
-    int eliteSizeAdjusted = min(elite_size, getPreferredIndivsShuffled().size());
+    int eliteSize = getEliteCount();
     
     // Copy the elite to the next generation
-    for (int i = 0; i < eliteSizeAdjusted; i++) {
+    for (int i = 0; i < eliteSize; i++) {
       new_generation[i] = individuals[i].getCopy();
     }
     
     // Create (breed) new individuals with crossover
-    for (int i = eliteSizeAdjusted; i < population_size; i++) {
+    for (int i = eliteSize; i < population_size; i++) {
       SuperFormula newIndiv;
       if (random(1) < crossover_rate) {
         SuperFormula parent1 = rouletteSelection();
@@ -53,8 +53,7 @@ class Population {
     
     // Mutate new individuals
     float sigma = sigma_max * pow(sigma_min / sigma_max, min(1, generations / (float) horizonG));
-    System.out.println("sigma: " + sigma);
-    for (int i = eliteSizeAdjusted; i < new_generation.length; i++) {
+    for (int i = eliteSize; i < new_generation.length; i++) {
       new_generation[i].mutate(sigma);
     }
     
@@ -148,6 +147,20 @@ class Population {
     return individuals[individuals.length - 1];
   }
   
+  int getEliteCount() {
+    for (int i = 0; i < elite_max; i++){
+      int fit = (int) individuals[i].getFitness();
+      if (i == 0){
+        if (fit == 0) {return 0;}
+        if (fit != elite_fitness) {return elite_min;}
+      }
+
+      if (fit != elite_fitness) {return i;} 
+    }
+    
+    return elite_min;
+  }
+
   /**
    * Returns list with individuals with fitness greater than zero.
    */

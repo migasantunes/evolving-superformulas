@@ -111,7 +111,7 @@ class SuperFormula {
       }
     }
 
-    if (mutated){
+    if (!mutated){
       int i = int(random(num_genes));
       genes[i] = reflect(genes[i] + randomGaussian() * sigma);
     }
