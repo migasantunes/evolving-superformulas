@@ -98,12 +98,22 @@ class SuperFormula {
   }
   
   // Mutation operator
-  void mutate() {
+  void mutate(float sigma) {
+    boolean mutated = false;
+
     for (int i = 0; i < genes.length; i++) {
       if (random(1) <= mutation_rate) {
-        //genes[i] = random(1); // Replace gene with a random one
-        genes[i] = constrain(genes[i] + random(-0.1, 0.1), 0, 1); // Adjust the value of the gene
+        mutated = true;
+        if (random(1) < reset_rate) {genes[i] = random(1); continue;} // chance of just reseting the gene, incase the population gets stuck
+
+        genes[i] = reflect(genes[i] + randomGaussian() * sigma); // Adjust the value of the gene
+        
       }
+    }
+
+    if (mutated){
+      int i = int(random(num_genes));
+      genes[i] = reflect(genes[i] + randomGaussian() * sigma);
     }
     phenotype = null;
   }

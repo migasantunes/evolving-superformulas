@@ -1,10 +1,16 @@
 int population_size = 30;
 int elite_size = 1;
 int tournament_size = 2;
+int resolution = 256; 
+// Crossover
 float crossover_rate = 0.5;
-float mutation_rate = 0.4;
 float alpha = 0.4; // blx-alpha paramater for the variation in between crossovers
-int resolution = 256;
+// Mutation
+float mutation_rate = 0.1;
+float reset_rate = 0.05;
+int horizonG = 25; // horizon for the annealed gaussian mutation
+float sigma_max = 0.15; // max for the annealed gaussian mutation
+float sigma_min = 0.03; // min for the annealed gaussian mutation
 
 Population pop;
 PVector[][] cells;

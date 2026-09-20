@@ -52,8 +52,10 @@ class Population {
     }
     
     // Mutate new individuals
+    float sigma = sigma_max * pow(sigma_min / sigma_max, min(1, generations / (float) horizonG));
+    System.out.println("sigma: " + sigma);
     for (int i = eliteSizeAdjusted; i < new_generation.length; i++) {
-       new_generation[i].mutate();
+      new_generation[i].mutate(sigma);
     }
     
     // Replace the individuals in the population with the new generation individuals
