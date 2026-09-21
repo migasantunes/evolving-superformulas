@@ -55,7 +55,7 @@ class SuperFormula {
       // for the rest of genes will go between [min_gene - alpha, max_gene + alpha]
       float range = random(-alpha, 1 + alpha);
       if (genes[gene] < partner.genes[gene]){
-        child.genes[gene] = reflect(genes[gene] + range * (partner.genes[gene] - genes[gene]));
+        child.genes[gene] = reflect(genes[gene] + range * (partner.genes[gene] - genes[gene])); // min + range * (max - min) --- same as when I calculate the parameters for the layers
         child.genes[gene + num_genes/2] = reflect(genes[gene + num_genes/2] + range * (partner.genes[gene + num_genes/2] - genes[gene + num_genes/2]));
       } else {
         child.genes[gene] = reflect(partner.genes[gene] + range * (genes[gene] - partner.genes[gene]));
@@ -66,35 +66,6 @@ class SuperFormula {
     return child;
   } 
   
-  // One-point crossover operator
-  SuperFormula onePointCrossover(SuperFormula partner) {
-    SuperFormula child = new SuperFormula();
-    int crossover_point = int(random(1, num_genes - 1));
-    for (int i = 0; i < num_genes; i++) {
-      if (i < crossover_point) {
-        child.genes[i] = genes[i];
-      } else {
-        child.genes[i] = partner.genes[i];
-      }
-    }
-    return child;
-  }
-  
-  // Uniform crossover operator
-  SuperFormula[] uniformCrossover(SuperFormula partner) {
-    SuperFormula child1 = getCopy();
-    SuperFormula child2 = partner.getCopy();
-
-    for (int i = 0; i < num_genes; i++) {
-      if (random(1) < 0.5) {
-        Float geneTemp = child1.genes[i];
-        child1.genes[i] = child2.genes[i];
-        child2.genes[i] = geneTemp;
-      }
-    }
-    return new SuperFormula[]{child1, child2};
-  }
-  
   // Mutation operator
   void mutate(float sigma) {
     boolean mutated = false;
@@ -102,7 +73,10 @@ class SuperFormula {
     for (int i = 0; i < num_genes; i++) {
       if (random(1) <= mutation_rate) {
         mutated = true;
-        if (random(1) < reset_rate) {genes[i] = random(1); continue;} // chance of just reseting the gene, incase the population gets stuck
+        if (random(1) < reset_rate) { // chance of just reseting the gene, incase the population gets stuck
+          genes[i] = random(1); 
+          continue;
+        }
 
         genes[i] = reflect(genes[i] + randomGaussian() * sigma); // Adjust the value of the gene
         
@@ -241,7 +215,7 @@ class SuperFormula {
     String output_path = sketchPath("outputs/" + output_filename);
     println("Exporting SuperFormula to: " + output_path);
     
-    getPhenotype(2000).save(output_path + ".png");
+    getPhenotype(128).save(output_path + ".png");
     
     PGraphics pdf = createGraphics(500, 500, PDF, output_path + ".pdf");
     pdf.beginDraw();

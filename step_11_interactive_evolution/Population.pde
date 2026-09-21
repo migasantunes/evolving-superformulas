@@ -52,7 +52,7 @@ class Population {
     }
     
     // Mutate new individuals
-    float sigma = sigma_max * pow(sigma_min / sigma_max, min(1, generations / (float) horizonG));
+    float sigma = sigma_max * pow(sigma_min / sigma_max, min(1, generations / (float) horizonG)); // Annealed Gaussian mutation
     for (int i = eliteSize; i < new_generation.length; i++) {
       new_generation[i].mutate(sigma);
     }
@@ -98,6 +98,30 @@ class Population {
   float wheelWeight(SuperFormula indiv) {
     float fit = indiv.getFitness();
     return (fit > 0) ? fit : unrated_weight;
+  }
+
+  SuperFormula rawRouletteSelection() {
+    float totalFitness = 0;
+    for (SuperFormula indiv : individuals){
+      totalFitness = totalFitness + indiv.getFitness();
+    }
+    
+    // Fallback if every rating is 0: there is one individual chosen at random
+    if (totalFitness == 0){
+      return individuals[int(random(0, individuals.length))];
+    }
+
+    float hit = random(totalFitness);
+    float addedFit = 0;
+
+    for (SuperFormula indiv : individuals){
+      addedFit = addedFit + indiv.getFitness();
+      if (hit < addedFit){
+        return indiv;
+      }
+    }
+
+    return individuals[individuals.length - 1];
   }
 
   int getEliteCount() {

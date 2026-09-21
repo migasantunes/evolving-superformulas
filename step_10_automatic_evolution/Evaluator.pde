@@ -5,6 +5,7 @@ class Evaluator {
 
   int res;
   int[] levels = {1, 2, 4, 8}; // Block sizes of the pyramid;
+  float[] level_weights = {1, 0.5, 0.25, 0.125};
   float ink_threshold = 0.02; // How dark a pixel must be to count as ink
   float[][] target_pyramid; // Pooled ink maps of the target, one per level
 
@@ -19,19 +20,20 @@ class Evaluator {
   float calculateFitness(SuperFormula indiv) {
     float[][] phenotype_pyramid = buildPyramid(getInk(indiv.getPhenotype(res)));
     float similarity = 0;
+    float total_weight = 0;
     for (int l = 0; l < levels.length; l++) {
-      similarity += dice(target_pyramid[l], phenotype_pyramid[l]);
+      similarity += level_weights[l] * dice(target_pyramid[l], phenotype_pyramid[l]);
+      total_weight += level_weights[l];
     }
-    return similarity / levels.length; // Average the levels so the result stays in [0, 1]
+    return similarity / total_weight; // Weighted average, so the result still stays in [0, 1]
   }
 
   // Turn an image into a binary ink map: 1 where the image has a mark, 0 where it is blank.
-  // Binarising here is what removes the faint-target/solid-phenotype mismatch.
   float[] getInk(PImage image) {
     image.loadPixels();
     float[] ink = new float[image.pixels.length];
     for (int i = 0; i < image.pixels.length; i++) {
-      float darkness = (255 - (image.pixels[i] & 0xFF)) / 255.0; // Blue channel, as before
+      float darkness = (255 - (image.pixels[i] & 0xFF)) / 255.0;
       ink[i] = (darkness > ink_threshold) ? 1 : 0;
     }
     return ink;
@@ -46,9 +48,7 @@ class Evaluator {
     return pyramid;
   }
 
-  // Average k x k blocks of an ink map. This is a blur and a downsample in one, and it is what
-  // gives a near miss a gradient to climb: two shapes that never overlap pixel for pixel still
-  // overlap once the map is coarse enough.
+  // Average k x k blocks of an ink map. This is a blur and a downsample in one
   float[] pool(float[] ink, int k) {
     if (k == 1) {
       return ink;

@@ -123,7 +123,7 @@
 
 ### Replacing RMSE with a multi-scale Dice coefficient
 - Thin targets kept evolving to an empty canvas with a high fitness, so I was thinking the cause was the RMSE
-- Replaced it with a multi-scale Dice coefficient, which is a better measure of shape similarity than RMSE, and is less sensitive to the target's sparsity
+- Replaced it with a multi-scale Dice coefficient (pyramid), which is a better measure of shape similarity than RMSE, and is less sensitive to the target's sparsity
 - The Dice coefficient is calculated at multiple scales and averaged, which helps to capture the shape at different levels of detail
 
 ### Speeding up the render
@@ -131,7 +131,36 @@
 - Step 10 had no phenotype cache, so every individual was drawn twice per generation, once for the fitness and once for draw(); copied the cache from step 11
 - The 1px stroke floor was an RMSE-era workaround; with binarised ink maps it no longer matters (0.993 correlation with it, 0.992 without), kept it because it makes the ink map depend only on geometry
 
-## Notes
-- everything about the drawing style needs implementing as a gene (stroke weight, stroke color, fill color, etc.) as prof said
-- step_scale could be made evolvable later, if a fixed value turns out to limit the population
-- m's sigma in step 10 gets little feedback: gene 2 is rounded, so small changes often leave the shape and the fitness untouched, and that sigma mostly drifts
+## Day 6
+
+### Globals and tidying
+- Moved num_layers, num_genes and the sigma clamps into the main sketches; num_layers was a per-instance field duplicated in both steps and it is the value I change most
+- Addressed the step half of the genome as gene + num_genes/2 instead of gene + 7, so adding genes later won't break the crossover
+- Named the genes in the export .txt and removed the unused crossover and tournament methods
+
+### Roulette in step 11: 0 means "not rated", not "bad"
+- Used unrated_weight to give a small chance to individuals rated 0, so they can be selected to breed: inicially at 0.5 but now to to 0.1; with 30 canvas on the screen I can actually look at all of them, so unrated means rejected
+- If I left it at 0.0 and only one individual is rated, the next generation would be all the same genes, because of BLX-alpha. That looks like a problem, but thanks to mutations it will still differentiate by a small amount
+
+### Roulette in step 10: ranks instead of raw fitness
+- Switched the wheel to linear ranking, w(i) = (2 - sp) + 2(sp - 1)(n - 1 - i)/(n - 1) with sp = 1.8;
+- Thought about windowing (subtracting the worst fitness) at first, but it over-amplifies once the spread is tiny
+
+### UI improvements
+- Added a status bar with the target image, generation, layer count, best and mean fitness, and keys [p] pause, [n] iterate one generation, [r] restart
+
+### Mutation was drowning selection
+- sigma_max at 0.5 changes too much, so every child was effectively a random individual 
+- Best then froze for 1500 generations, because there was no survivor selection: self-adaptive sigma is calibrated for (mu, lambda) truncation that discards most children, and with lambda = mu = 99 and nothing discarded log(sigma) just random-walks the clamp range in about 50 generations
+- Restricted the parent pool to the best mu of the sorted population, which turns the generational loop into (mu, lambda) at no extra evaluation cost; truncating at 20% is selection intensity 1.40 against 0.45 for ranking alone
+- Swept mu: 20 and 30 converged too early, settled on 50
+
+## Day 7
+
+### The target was the problem, not the search
+- Step 11 exported targets at 2000px while step 10 evaluated candidates at 128px, causing mismatched resolution and line widths that limited the maximum Dice score.
+- Exporting the target at 128px improved the best individual's full-resolution Dice score.
+
+### Weighting the pyramid levels
+- Weighted the pyramid levels toward higher resolutions because equal weights let the GA trade full-resolution pixel accuracy for cheaper gains at coarse scales, whose scores already had little headroom
+- Weighted the levels by 1/k = {1, 0.5, 0.25, 0.125}, normalised by the weight sum
