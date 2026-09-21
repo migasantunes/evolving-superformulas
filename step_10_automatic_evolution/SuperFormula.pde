@@ -167,7 +167,7 @@ class SuperFormula {
       float n1 = constrain(0.1 + genes[3] * 19.9 + i * (genes[10]  - 0.5) * 2 * 19.9 / layer_denom, 0.1, 20);
       float n2 = constrain(0.1 + genes[4] * 19.9 + i * (genes[11] - 0.5) * 2 * 19.9 / layer_denom, 0.1, 20);
       float n3 = constrain(0.1 + genes[5] * 19.9 + i * (genes[12] - 0.5) * 2 * 19.9 / layer_denom, 0.1, 20);
-      float size = constrain(0.1 + genes[6] * 1.1 + i * (genes[13] - 0.5) * 2 * 1.1 / layer_denom, 0.1, 1.2);
+      float size = constrain(0.1 + genes[6] * 0.9 + i * (genes[13] - 0.5) * 2 * 0.9 / layer_denom, 0.1, 1);
 
       float[] p = {a, b, m, n1, n2, n3, size};
 

@@ -80,7 +80,7 @@ class Population {
   }
   
   SuperFormula rouletteSelectionLinearRanking() {
-    int n = individuals.length;
+    int n = min(mu, individuals.length); // only the best mu individuals are allowed to breed
     float hit = random(n); // the linear-rank weights always add up to the population size
     float addedFit = 0;
     for (int i = 0; i < n; i++) {

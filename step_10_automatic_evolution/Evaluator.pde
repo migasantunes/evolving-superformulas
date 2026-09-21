@@ -1,24 +1,17 @@
 // This class enables the evaluation of individuals (SuperFormulas).
-//
-// Fitness is a multi-scale Dice coefficient over binarised ink maps, not a raw-brightness RMSE.
-// RMSE was replaced because it made a blank canvas the best possible answer for line-art targets:
-//   - the targets are 2000px exports downsampled to the evaluation size, so their strokes come out
-//     faint grey, while the phenotype draws solid black; every correct pixel was still penalised
-//   - RMSE also scales with how much ink the target has, so for a thin target "draw nothing" beat
-//     every imperfect attempt
 // Dice compares which pixels are inked rather than how dark they are, so it is immune to both:
 // it is 0 for a blank canvas and 1 for an exact match, whatever fraction of the canvas is inked.
 class Evaluator {
 
-  int res; // Resolution at which individuals are evaluated
-  int[] levels = {1, 2, 4, 8}; // Block sizes of the pyramid; 1 is full resolution
+  int res;
+  int[] levels = {1, 2, 4, 8}; // Block sizes of the pyramid;
   float ink_threshold = 0.02; // How dark a pixel must be to count as ink
   float[][] target_pyramid; // Pooled ink maps of the target, one per level
 
   Evaluator(PImage image, int resolution) {
     res = resolution;
-    PImage target_image = image.copy(); // Get a clean copy of the target image
-    target_image.resize(res, res); // Resize the target image to the preset resolution
+    PImage target_image = image.copy();
+    target_image.resize(res, res);
     target_pyramid = buildPyramid(getInk(target_image));
   }
 

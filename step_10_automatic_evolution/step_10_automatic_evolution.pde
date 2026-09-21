@@ -1,10 +1,12 @@
 int population_size = 100;
 int elite_size = 1;
 int resolution = 128;
-String path_target_image = "glyphs_1693591751539/test6.png";
+String path_target_image = "glyphs_1693591751539/test7.png";
 int num_genes = 14;
 int num_layers = 5;
+// Selection
 float selection_pressure = 1.8; // linear ranking pressure for the roulette wheel range [1, 2]
+int mu = 40; // number of the best individuals allowed to breed
 // Crossover
 float crossover_rate = 0.5;
 float alpha = 0.5; // blx-alpha paramater for the variation in between crossovers
@@ -102,7 +104,7 @@ void drawStatusBar() {
   fill(phenotype_mode ? 60 : 200);
   textAlign(LEFT, TOP);
   textSize(13);
-  text("Generation: " + pop.getGenerations() + "     Nº layers: " + num_layers + (paused ? "     [PAUSED]" : ""), text_x, bar_y + 12);
+  text("Generation: " + pop.getGenerations() + "     Nº of layers: " + num_layers + (paused ? "     [PAUSED]" : ""), text_x, bar_y + 12);
   text("Best Fitness: " + nf(best, 0, 4) + "     Mean Fitness of the population: " + nf(mean, 0, 4), text_x, bar_y + 34);
   fill(phenotype_mode ? 120 : 140);
   text("[p] pause     [n] one generation     [r] restart     [e] export best     [space] points view     [f] fitness labels", text_x, bar_y + 64);
