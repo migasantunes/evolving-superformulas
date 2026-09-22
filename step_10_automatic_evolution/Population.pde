@@ -97,6 +97,27 @@ class Population {
     return 2 - selection_pressure + 2 * (selection_pressure - 1) * (n - 1 - rank) / (float) (n - 1);
   }
 
+SuperFormula rawRouletteSelection() {
+    float totalFitness = 0;
+    for (int i = 0; i < individuals.length; i++) {
+      totalFitness += individuals[i].getFitness();
+    }
+
+    if (totalFitness == 0) {
+      return individuals[(int) random(individuals.length)];
+    }
+    
+    float hit = random(totalFitness);
+    float addedFit = 0;
+    for (int i = 0; i < individuals.length; i++) {
+      addedFit += individuals[i].getFitness();
+      if (hit < addedFit) {
+        return individuals[i];
+      }
+    }
+    return individuals[individuals.length - 1];
+  }
+
   // Sort individuals in the population by fitness in descending order (fittest first)
   void sortIndividualsByFitness() {
     Arrays.sort(individuals, new Comparator<SuperFormula>() {
