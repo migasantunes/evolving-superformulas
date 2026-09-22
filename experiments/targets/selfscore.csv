@@ -1,0 +1,3 @@
+target,dice_ref,dice_k1,rmse
+target128,1.0,1.0,0.0
+target2000,0.9450854,0.9173789,0.10082968

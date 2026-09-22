@@ -212,7 +212,11 @@ class SuperFormula {
   // Export image (png), vector (pdf) and genes (txt) of this SuperFormula
   void export() {
     String output_filename = year() + "-" + nf(month(), 2) + "-" + nf(day(), 2) + "-" + nf(hour(), 2) + "-" + nf(minute(), 2) + "-" + nf(second(), 2);
-    String output_path = sketchPath("outputs/" + output_filename);
+    export(sketchPath("outputs/" + output_filename));
+  }
+
+  // Same export, to a given path without extension (used by the session log)
+  void export(String output_path) {
     println("Exporting SuperFormula to: " + output_path);
     
     getPhenotype(128).save(output_path + ".png");

@@ -17,6 +17,9 @@ float sigma_min = 0.03; // min for the annealed gaussian mutation
 int elite_fitness = 10;
 int elite_max = 3;
 int elite_min = 1;
+// Session log: on each evolve, export the top-rated individual to sessions/<timestamp>/gen_XX and
+// append the generation's ratings and genomes to sessions/<timestamp>/session.csv
+boolean log_session = false;
 
 Population pop;
 PVector[][] cells;

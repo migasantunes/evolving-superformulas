@@ -1,0 +1,11 @@
+target: C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\step_10_automatic_evolution\data\glyphs_1693591751539\test8.png
+seed: 4
+gens: 300
+selection: ranking
+mu: 100
+sigma_min: 0.02
+sigma_max: 0.1
+fitness: dice
+weights: [1.0, 0.5, 0.25, 0.125]
+num_layers: 5
+runtime_s: 464.6594052

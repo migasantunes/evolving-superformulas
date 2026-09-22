@@ -1,0 +1,3 @@
+target_render,self_score_dice_ref,self_score_dice_k1,baseline_run_final_dice_ref,final_genome_vs_128_target_dice_ref
+target128,1.0,1.0,0.88975513,0.88975513
+target2000,0.9450854,0.9173789,0.9420802,0.9593212

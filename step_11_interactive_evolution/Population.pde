@@ -5,7 +5,8 @@ class Population {
   
   SuperFormula[] individuals; // Array to store the individuals in the population
   int generations; // Integer to keep count of how many generations have been created
-  
+  String session_path = null; // Folder of the logged session, created on its first logged generation
+
   Population() {
     individuals = new SuperFormula[population_size];
     initialize();
@@ -20,6 +21,39 @@ class Population {
     
     // Reset generations counter
     generations = 0;
+
+    // A reset starts a new logged session
+    session_path = null;
+  }
+
+  // Export the top-rated individual (the population is already sorted) and append one CSV row with
+  // the generation, every rating and every genome, in the same (sorted) order
+  void logGeneration() {
+    if (session_path == null) {
+      String timestamp = year() + "-" + nf(month(), 2) + "-" + nf(day(), 2) + "-" + nf(hour(), 2) + "-" + nf(minute(), 2) + "-" + nf(second(), 2);
+      session_path = sketchPath("sessions/" + timestamp);
+    }
+    individuals[0].export(session_path + "/gen_" + nf(generations, 2));
+
+    String ratings = "";
+    String genomes = "";
+    for (int i = 0; i < individuals.length; i++) {
+      String sep = (i == 0) ? "" : ";";
+      ratings += sep + int(individuals[i].getFitness());
+      genomes += sep + join(nf(individuals[i].genes, 0, 6), " ");
+    }
+    java.io.File csv = new java.io.File(session_path + "/session.csv");
+    try {
+      boolean is_new = !csv.exists();
+      java.io.PrintWriter out = new java.io.PrintWriter(new java.io.FileWriter(csv, true));
+      if (is_new) {
+        out.println("gen,ratings,genomes");
+      }
+      out.println(generations + "," + ratings + "," + genomes);
+      out.close();
+    } catch (java.io.IOException e) {
+      println("Could not write the session log: " + e.getMessage());
+    }
   }
   
   // Create the next generation
@@ -29,7 +63,12 @@ class Population {
     
     // Sort individuals by fitness
     sortIndividualsByFitness();
-    
+
+    // Record this generation before it is replaced (off unless log_session is true)
+    if (log_session) {
+      logGeneration();
+    }
+
     // Count number of individuals with fitness score
     int eliteSize = getEliteCount();
     

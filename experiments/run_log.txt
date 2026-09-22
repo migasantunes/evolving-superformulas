@@ -1,0 +1,123 @@
+121 runs, 10 seeds x 300 gens, 20 parallel
+[1/121 279s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\baseline\seed_09 in 277.6s
+[2/121 281s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\baseline\seed_05 in 280.1s
+[3/121 296s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\raw_roulette\seed_02 in 294.9s
+[4/121 296s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\raw_roulette\seed_07 in 295.6s
+[5/121 297s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\raw_roulette\seed_03 in 296.4s
+[6/121 300s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\raw_roulette\seed_08 in 299.4s
+[7/121 301s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\raw_roulette\seed_04 in 300.6s
+[8/121 302s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\raw_roulette\seed_01 in 301.2s
+[9/121 302s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\raw_roulette\seed_09 in 301.3s
+[10/121 302s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\raw_roulette\seed_06 in 301.8s
+[11/121 307s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\raw_roulette\seed_00 in 306.1s
+[12/121 309s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\raw_roulette\seed_05 in 308.3s
+[13/121 318s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\baseline\seed_00 in 317.0s
+[14/121 321s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\baseline\seed_06 in 320.2s
+[15/121 322s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\baseline\seed_07 in 321.4s
+[16/121 327s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\baseline\seed_04 in 326.2s
+[17/121 331s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\baseline\seed_08 in 330.7s
+[18/121 331s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\baseline\seed_03 in 330.7s
+[19/121 334s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\baseline\seed_02 in 333.3s
+[20/121 339s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\baseline\seed_01 in 338.2s
+[21/121 560s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\ranking_no_trunc\seed_01 in 277.9s
+[22/121 571s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\ranking_no_trunc\seed_00 in 291.3s
+[23/121 576s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\ranking_no_trunc\seed_04 in 277.3s
+[24/121 577s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\ranking_no_trunc\seed_05 in 275.8s
+[25/121 582s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\ranking_no_trunc\seed_03 in 284.5s
+[26/121 583s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\ranking_no_trunc\seed_06 in 280.9s
+[27/121 592s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\ranking_no_trunc\seed_02 in 295.3s
+[28/121 592s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\ranking_no_trunc\seed_09 in 288.4s
+[29/121 595s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\ranking_no_trunc\seed_07 in 291.5s
+[30/121 600s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\fixed_sigma\seed_09 in 260.2s
+[31/121 602s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\fixed_sigma\seed_00 in 294.2s
+[32/121 611s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\fixed_sigma\seed_03 in 289.5s
+[33/121 611s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\ranking_no_trunc\seed_08 in 308.1s
+[34/121 616s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\fixed_sigma\seed_01 in 305.7s
+[35/121 619s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\fixed_sigma\seed_08 in 282.7s
+[36/121 620s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\fixed_sigma\seed_02 in 300.7s
+[37/121 638s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\fixed_sigma\seed_05 in 309.7s
+[38/121 640s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\fixed_sigma\seed_06 in 307.2s
+[39/121 647s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\fixed_sigma\seed_04 in 323.9s
+[40/121 652s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\fixed_sigma\seed_07 in 320.1s
+[41/121 827s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\rmse\seed_00 in 265.8s
+[42/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\baseline\seed_00
+[43/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\baseline\seed_01
+[44/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\baseline\seed_02
+[45/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\baseline\seed_03
+[46/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\baseline\seed_04
+[47/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\baseline\seed_05
+[48/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\baseline\seed_06
+[49/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\baseline\seed_07
+[50/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\baseline\seed_08
+[51/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\baseline\seed_09
+[52/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\raw_roulette\seed_00
+[53/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\raw_roulette\seed_01
+[54/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\raw_roulette\seed_02
+[55/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\raw_roulette\seed_03
+[56/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\raw_roulette\seed_04
+[57/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\raw_roulette\seed_05
+[58/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\raw_roulette\seed_06
+[59/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\raw_roulette\seed_07
+[60/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\raw_roulette\seed_08
+[61/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\raw_roulette\seed_09
+[62/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\ranking_no_trunc\seed_00
+[63/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\ranking_no_trunc\seed_01
+[64/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\ranking_no_trunc\seed_02
+[65/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\ranking_no_trunc\seed_03
+[66/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\ranking_no_trunc\seed_04
+[67/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\ranking_no_trunc\seed_05
+[68/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\ranking_no_trunc\seed_06
+[69/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\ranking_no_trunc\seed_07
+[70/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\ranking_no_trunc\seed_08
+[71/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\ranking_no_trunc\seed_09
+[72/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\fixed_sigma\seed_00
+[73/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\fixed_sigma\seed_01
+[74/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\fixed_sigma\seed_02
+[75/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\fixed_sigma\seed_03
+[76/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\fixed_sigma\seed_04
+[77/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\fixed_sigma\seed_05
+[78/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\fixed_sigma\seed_06
+[79/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\fixed_sigma\seed_07
+[80/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\fixed_sigma\seed_08
+[81/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\fixed_sigma\seed_09
+[82/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\rmse\seed_00
+[83/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\rmse\seed_01
+[84/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\rmse\seed_02
+[85/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\rmse\seed_03
+[86/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\rmse\seed_04
+[87/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\rmse\seed_05
+[88/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\rmse\seed_06
+[89/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\rmse\seed_07
+[90/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\rmse\seed_08
+[91/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\rmse\seed_09
+[92/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\equal_weights\seed_00
+[93/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\equal_weights\seed_01
+[94/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\equal_weights\seed_02
+[95/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\equal_weights\seed_03
+[96/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\equal_weights\seed_04
+[97/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\equal_weights\seed_05
+[98/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\equal_weights\seed_06
+[99/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\equal_weights\seed_07
+[100/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\equal_weights\seed_08
+[101/121 827s] skip C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\test8\equal_weights\seed_09
+[102/121 831s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\rmse\seed_05 in 246.4s
+[103/121 843s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\rmse\seed_03 in 264.0s
+[104/121 846s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\rmse\seed_07 in 253.2s
+[105/121 852s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\rmse\seed_06 in 259.9s
+[106/121 858s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\rmse\seed_09 in 256.4s
+[107/121 864s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\rmse\seed_02 in 287.5s
+[108/121 864s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\rmse\seed_01 in 293.1s
+[109/121 872s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\rmse\seed_04 in 289.6s
+[110/121 874s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\equal_weights\seed_02 in 261.9s
+[111/121 885s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\equal_weights\seed_00 in 281.5s
+[112/121 885s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\rmse\seed_08 in 288.7s
+[113/121 894s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\equal_weights\seed_07 in 252.7s
+[114/121 896s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\equal_weights\seed_05 in 274.4s
+[115/121 897s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\equal_weights\seed_08 in 248.6s
+[116/121 902s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\equal_weights\seed_06 in 263.6s
+[117/121 903s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\equal_weights\seed_04 in 282.8s
+[118/121 903s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\equal_weights\seed_01 in 291.0s
+[119/121 906s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\equal_weights\seed_03 in 288.6s
+[120/121 907s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn\equal_weights\seed_09 in 253.0s
+[121/121 991s] done C:\Users\migas\Desktop\UC\MIA\PCIA\evolving-superformulas\experiments\results\tsyn2000\baseline\seed_00 in 163.1s
+total wall time 991s, 0 failed
